@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard AI</title>
+    <title>Rain Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -12,81 +12,67 @@
     <div class="cyber-grid"></div>
     <div class="ambient-glow"></div>
 
-    <div class="overlay" id="overlay"></div>
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <span class="sidebar-logo">MENU</span>
-            <button class="icon-btn ripple" id="close-sidebar">
-                <i class="ph ph-x"></i>
-            </button>
+    <nav class="topbar">
+        <button class="icon-btn" id="menu-toggle">
+            <i class="ph ph-command"></i>
+        </button>
+        <div class="profile-btn" style="width: 48px; height: 48px; border: 2px solid var(--neon); border-radius: 50%; overflow: hidden; padding: 2px;">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Dika" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
         </div>
-        <nav class="sidebar-nav">
-            <a href="index.html" class="sidebar-link active ripple">
-                <i class="ph ph-house"></i>
-                <span>DASHBOARD</span>
-            </a>
-            <a href="dashboard/profile.html" class="sidebar-link ripple">
-                <i class="ph ph-user-circle"></i>
-                <span>PROFILE</span>
-            </a>
-            <a href="dashboard/setting.html" class="sidebar-link ripple">
-                <i class="ph ph-gear"></i>
-                <span>SETTING</span>
-            </a>
-        </nav>
-        <div class="sidebar-footer">
-            <p>V 1.0.0</p>
-        </div>
-    </aside>
+    </nav>
 
     <div class="app-container">
-        <nav class="topbar">
-            <button class="icon-btn ripple" id="menu-toggle">
-                <i class="ph ph-list"></i>
-            </button>
-            <span class="topbar-title">CHAT BOT BY DIKA 🚀</span>
-            <button class="profile-btn ripple" onclick="setTimeout(() => window.location.href='dashboard/profile.html', 300)">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Dika&backgroundColor=151515" alt="Profile">
-            </button>
-        </nav>
-
         <header class="header-section">
-            <h1>Dashboard</h1>
-            <p>Pilih terminal chatbot</p>
+            <p style="color: var(--neon); font-weight: 700; font-size: 12px; letter-spacing: 2px; margin-bottom: 5px;">SYSTEM ACTIVE</p>
+            <h1>Terminal Dashboard</h1>
         </header>
 
         <main class="dashboard-grid">
-            <div class="bot-card ripple-card" onclick="window.location.href='dashboard/rain-chat.html'">
-                <div class="card-header">
-                    <div class="bot-icon">
-                        <i class="ph ph-robot"></i>
-                    </div>
-                    <span class="version-badge">v1</span>
+            <div class="bot-card" onclick="location.href='dashboard/rain-chat.html'">
+                <div class="bot-icon">
+                    <i class="ph ph-cpu"></i>
                 </div>
                 <h2 class="bot-name">RAIN BOT</h2>
                 <div class="bot-status">
                     <span class="status-dot"></span>
-                    <span class="status-text">ONLINE</span>
+                    <span>ONLINE V.1</span>
+                </div>
+            </div>
+
+            <div class="bot-card">
+                <div class="bot-icon" style="border-color: var(--text-dim); color: var(--text-dim); box-shadow: none;">
+                    <i class="ph ph-lock-key"></i>
+                </div>
+                <h2 class="bot-name" style="color: var(--text-dim);">PRIVATE</h2>
+                <div class="bot-status" style="color: var(--text-dim);">
+                    <span class="status-dot" style="background: var(--text-dim); box-shadow: none; animation: none;"></span>
+                    <span>LOCKED</span>
                 </div>
             </div>
         </main>
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active ripple">
-            <i class="ph ph-chat-teardrop-text"></i>
+        <a href="index.html" class="nav-item active">
+            <i class="ph ph-house-line"></i>
             <span>CHAT</span>
         </a>
-        <a href="dashboard/fitur.html" class="nav-item ripple">
-            <i class="ph ph-squares-four"></i>
+        <a href="#" class="nav-item">
+            <i class="ph ph-intersect"></i>
             <span>FITUR</span>
         </a>
-        <a href="dashboard/setting.html" class="nav-item ripple">
-            <i class="ph ph-gear"></i>
+        <a href="#" class="nav-item">
+            <i class="ph ph-faders-horizontal"></i>
             <span>SETTING</span>
         </a>
     </nav>
 
-    <script src="main.js"></script>
+    <script>
+        document.querySelectorAll('.bot-card, .icon-btn, .nav-item').forEach(el => {
+            el.addEventListener('click', () => {
+                if (window.navigator.vibrate) window.navigator.vibrate(10);
+            });
+        });
+    </script>
 </body>
 </html>
