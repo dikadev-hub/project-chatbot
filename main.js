@@ -1,17 +1,19 @@
-document.querySelectorAll('.nav-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('active');
-            btn.classList.add('text-slate-600');
-            btn.classList.remove('text-red-500');
-        });
+const menuBtn = document.getElementById('menu-btn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
 
-        this.classList.add('active');
-        this.classList.remove('text-slate-600');
-        this.classList.add('text-red-500');
-    });
-});
+function toggleSidebar() {
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+}
 
-function selectBot(botName) {
-    console.log("Terminal " + botName + " dipilih.");
+menuBtn.addEventListener('click', toggleSidebar);
+overlay.addEventListener('click', toggleSidebar);
+
+/* Fungsi Navigasi dengan Delay Animasi */
+function navTo(url) {
+    // Memberikan sedikit jeda agar animasi klik (scale) terlihat dulu
+    setTimeout(() => {
+        window.location.href = url;
+    }, 150);
 }
