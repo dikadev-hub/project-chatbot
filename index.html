@@ -3,82 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>XYZ OS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Chat Bot - DIKA</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="h-screen flex flex-col overflow-hidden bg-[#05070a]">
-
-    <header class="px-8 pt-10 pb-6 flex justify-between items-end">
-        <div>
-            <h1 class="text-3xl font-bold tracking-tighter gradient-text">XYZ OS</h1>
-            <div class="flex items-center gap-2 mt-1">
-                <span class="h-1.5 w-1.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></span>
-                <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] font-bold">System Active</p>
-            </div>
-        </div>
-        <div class="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center bg-slate-900/50">
-            <span class="text-xs font-bold text-red-500">DX</span>
-        </div>
-    </header>
-
-    <main class="flex-1 overflow-y-auto px-6 pb-24">
-        <div class="mb-6 px-2">
-            <h2 class="text-xl font-bold text-white">Pilih Mode Terminal</h2>
-            <p class="text-xs text-slate-500 mt-1">Gunakan salah satu unit untuk memulai.</p>
-        </div>
-
-        <div class="grid gap-4">
-            <div class="bot-card p-6 rounded-[2rem] flex items-center gap-5 active:scale-[0.97]" onclick="selectBot('V1')">
-                <div class="w-14 h-14 bg-red-600/10 rounded-2xl flex items-center justify-center border border-red-600/20">
-                    <svg class="text-red-500" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-lg font-bold text-white tracking-tight">XYZ BOT V1</h3>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-1">Operational</p>
-                </div>
-                <div class="text-slate-700">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">CHAT BOT BY DIKA</h1>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span class="status-text">Online</span>
                 </div>
             </div>
+        </header>
 
-            <div class="bot-card p-6 rounded-[2rem] flex items-center gap-5 opacity-40 grayscale">
-                 <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center border border-white/5">
-                    <svg class="text-slate-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-lg font-bold text-slate-400">XYZ BOT V2</h3>
-                    <p class="text-[10px] text-slate-600 uppercase tracking-widest font-bold mt-1">Locked</p>
-                </div>
+        <!-- Main Content -->
+        <main class="main">
+            <div class="selection-header">
+                <h2 class="section-title">Pilih Bot</h2>
+                <p class="section-subtitle">Pilih salah satu bot untuk memulai percakapan</p>
             </div>
 
-            <div class="bot-card p-6 rounded-[2rem] flex items-center gap-5 opacity-40 grayscale">
-                 <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center border border-white/5">
-                    <svg class="text-slate-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div class="bot-grid">
+                <!-- RAIN BOT - Active -->
+                <div class="bot-card active" onclick="selectBot('rain')">
+                    <div class="bot-icon">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="3" fill="none"/>
+                            <path d="M24 8v8M16 16h8m8 0h-8m-8 8h16m-16 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M28 36l2 2 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M20 36l-2 2-2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="bot-info">
+                        <h3 class="bot-name">RAIN BOT</h3>
+                        <p class="bot-status">Siap digunakan</p>
+                    </div>
+                    <div class="bot-action">
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
                 </div>
-                <div class="flex-1">
-                    <h3 class="text-lg font-bold text-slate-400">XYZ BOT V3</h3>
-                    <p class="text-[10px] text-slate-600 uppercase tracking-widest font-bold mt-1">Locked</p>
+
+                <!-- Bot 2 - Locked -->
+                <div class="bot-card locked">
+                    <div class="bot-icon">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <rect x="12" y="16" width="24" height="24" rx="4" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="24" cy="24" r="8" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="bot-info">
+                        <h3 class="bot-name">STORM BOT</h3>
+                        <p class="bot-status">Belum tersedia</p>
+                    </div>
+                </div>
+
+                <!-- Bot 3 - Locked -->
+                <div class="bot-card locked">
+                    <div class="bot-icon">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M24 8L12 16v16c0 6 8 10 8 10s8-4 8-10V16l-12-8z" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="bot-info">
+                        <h3 class="bot-name">THUNDER BOT</h3>
+                        <p class="bot-status">Belum tersedia</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <nav class="glass-nav fixed bottom-0 left-0 right-0 px-10 py-6 pb-8 flex justify-between items-center">
-        <button class="nav-btn active flex flex-col items-center gap-2">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em]">Chat</span>
-        </button>
-        <button class="nav-btn flex flex-col items-center gap-2 text-slate-600">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em]">Fitur</span>
-        </button>
-        <button class="nav-btn flex flex-col items-center gap-2 text-slate-600">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            <span class="text-[9px] font-black uppercase tracking-[0.2em]">Set</span>
-        </button>
-    </nav>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+                <span>Chat</span>
+            </button>
+            <button class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+                <span>Fitur</span>
+            </button>
+            <button class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+                <span>Profil</span>
+            </button>
+        </nav>
+    </div>
 
-    <script src="main.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
