@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chat Terminal - Rain Bot</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .chat-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: var(--bg-main);
+        }
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 100px;
+        }
+        .bubble {
+            max-width: 85%;
+            padding: 14px 18px;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+            transition: 0.3s;
+        }
+        .bubble.bot {
+            align-self: flex-start;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px 20px 20px 4px;
+            color: var(--text-primary);
+        }
+        .bubble.user {
+            align-self: flex-end;
+            background: var(--accent);
+            color: #0D0D0D;
+            border-radius: 20px 20px 4px 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 255, 178, 0.2);
+        }
+        .chat-input-container {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(21, 21, 21, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 6px 6px 6px 18px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+        .chat-input-container input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .send-btn-circle {
+            width: 42px;
+            height: 42px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+        }
+        .send-btn-circle:active {
+            transform: scale(0.9);
+        }
+        .send-btn-circle i {
+            font-size: 20px;
+            color: #0D0D0D;
+        }
+        .status-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .status-header .name {
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+        .status-header .online {
+            font-size: 9px;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    
+    <div class="chat-wrapper">
+        <nav class="topbar" style="padding: 20px;">
+            <button class="icon-btn ripple" onclick="window.location.href='../index.html'">
+                <i class="ph ph-caret-left"></i>
+            </button>
+            <div class="status-header">
+                <span class="name">RAIN BOT</span>
+                <span class="online">● System Active</span>
+            </div>
+            <div style="width: 44px;"></div>
+        </nav>
+
+        <div class="chat-body" id="chatArea">
+            <div class="bubble bot">
+                Sistem dimulai... Ketik <b>.menu</b> untuk bantuan.
+            </div>
+        </div>
+
+        <form class="chat-input-container" id="chatForm">
+            <input type="text" id="inputMsg" placeholder="Masukkan perintah..." autocomplete="off">
+            <button type="submit" class="send-btn-circle">
+                <i class="ph ph-paper-plane-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <script type="module" src="../chat-logic/case-rain.js"></script>
+</body>
+</html>
