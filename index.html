@@ -5,23 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard AI</title>
     <link rel="stylesheet" href="style.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <div class="cyber-grid"></div>
     <div class="ambient-glow"></div>
 
+    <div class="overlay" id="overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">MENU</span>
+            <button class="icon-btn ripple" id="close-sidebar">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="sidebar-link active ripple">
+                <i class="ph ph-house"></i>
+                <span>DASHBOARD</span>
+            </a>
+            <a href="dashboard/profile.html" class="sidebar-link ripple">
+                <i class="ph ph-user-circle"></i>
+                <span>PROFILE</span>
+            </a>
+            <a href="dashboard/setting.html" class="sidebar-link ripple">
+                <i class="ph ph-gear"></i>
+                <span>SETTING</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>V 1.0.0</p>
+        </div>
+    </aside>
+
     <div class="app-container">
-        
         <nav class="topbar">
-            <button class="icon-btn">
+            <button class="icon-btn ripple" id="menu-toggle">
                 <i class="ph ph-list"></i>
             </button>
             <span class="topbar-title">CHAT BOT BY DIKA 🚀</span>
-            <button class="profile-btn">
+            <button class="profile-btn ripple" onclick="setTimeout(() => window.location.href='dashboard/profile.html', 300)">
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Dika&backgroundColor=151515" alt="Profile">
             </button>
         </nav>
@@ -32,8 +56,7 @@
         </header>
 
         <main class="dashboard-grid">
-            
-            <div class="bot-card">
+            <div class="bot-card ripple-card">
                 <div class="card-header">
                     <div class="bot-icon">
                         <i class="ph ph-robot"></i>
@@ -46,23 +69,24 @@
                     <span class="status-text">ONLINE</span>
                 </div>
             </div>
-            
-            </main>
+        </main>
     </div>
 
     <nav class="bottom-nav">
-        <a href="#" class="nav-item active">
+        <a href="index.html" class="nav-item active ripple">
             <i class="ph ph-chat-teardrop-text"></i>
             <span>CHAT</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="dashboard/fitur.html" class="nav-item ripple">
             <i class="ph ph-squares-four"></i>
             <span>FITUR</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="dashboard/setting.html" class="nav-item ripple">
             <i class="ph ph-gear"></i>
             <span>SETTING</span>
         </a>
     </nav>
+
+    <script src="main.js"></script>
 </body>
 </html>
