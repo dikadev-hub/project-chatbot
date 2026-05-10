@@ -1,17 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-* {
-    -webkit-tap-highlight-color: transparent;
-    box-sizing: border-box;
-}
+* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #fff; margin: 0; }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #0a0a0a;
-    color: #fff;
-    margin: 0;
-}
-
+/* Grid Card Animasi */
 .mode-square {
     aspect-ratio: 1 / 1;
     background: #121212;
@@ -23,52 +15,22 @@ body {
     justify-content: center;
     gap: 12px;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
 }
+.active-card:active { transform: scale(0.9); background: #1a1a1a; }
 
-.active-card:active {
-    background: #1a1a1a;
-    transform: scale(0.92);
-    border-color: rgba(255, 255, 255, 0.1);
-}
+.icon-box { width: 42px; height: 42px; border-radius: 12px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; color: #444; }
+.active-icon { color: #fff; border: 1px solid rgba(255, 255, 255, 0.05); }
 
-.icon-box {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background: #1a1a1a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #444;
+/* Navbar dengan Animasi Tekan */
+.nav-container { background: #0a0a0a; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.nav-link { 
+    display: flex; flex-direction: column; align-items: center; gap: 8px; 
+    color: #444; transition: all 0.2s ease; 
 }
+.nav-link:active { transform: scale(0.85); color: #fff; }
+.nav-link .label { font-size: 8px; font-weight: 800; letter-spacing: 0.15em; }
+.nav-link.active { color: #fff; }
 
-.active-icon {
-    background: rgba(255, 255, 255, 0.02);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.nav-container {
-    background: #0a0a0a;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: #444;
-    transition: color 0.3s ease;
-}
-
-.nav-link .label {
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: 0.15em;
-}
-
-.nav-link.active {
-    color: #fff;
-}
+/* Sidebar Style */
+.sidebar-link { font-size: 14px; font-weight: 600; color: #555; text-decoration: none; transition: 0.2s; }
+.sidebar-link.active { color: #fff; }
