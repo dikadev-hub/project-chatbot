@@ -29,7 +29,6 @@
             font-size: 14px;
             line-height: 1.6;
             position: relative;
-            transition: 0.3s;
         }
         .bubble.bot {
             align-self: flex-start;
@@ -44,7 +43,6 @@
             color: #0D0D0D;
             border-radius: 20px 20px 4px 20px;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 255, 178, 0.2);
         }
         .chat-input-container {
             position: fixed;
@@ -60,7 +58,6 @@
             padding: 6px 6px 6px 18px;
             display: flex;
             align-items: center;
-            z-index: 1000;
         }
         .chat-input-container input {
             flex: 1;
@@ -69,7 +66,6 @@
             outline: none;
             color: white;
             font-size: 14px;
-            font-family: inherit;
         }
         .send-btn-circle {
             width: 42px;
@@ -81,30 +77,6 @@
             align-items: center;
             cursor: pointer;
             border: none;
-            transition: 0.2s;
-        }
-        .send-btn-circle:active {
-            transform: scale(0.9);
-        }
-        .send-btn-circle i {
-            font-size: 20px;
-            color: #0D0D0D;
-        }
-        .status-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .status-header .name {
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-        .status-header .online {
-            font-size: 9px;
-            color: var(--accent);
-            font-weight: 700;
-            text-transform: uppercase;
         }
     </style>
 </head>
@@ -116,9 +88,9 @@
             <button class="icon-btn ripple" onclick="window.location.href='../index.html'">
                 <i class="ph ph-caret-left"></i>
             </button>
-            <div class="status-header">
-                <span class="name">RAIN BOT</span>
-                <span class="online">● System Active</span>
+            <div style="text-align: center;">
+                <span style="display: block; font-weight: 700; font-size: 14px;">RAIN BOT</span>
+                <span style="font-size: 9px; color: var(--accent); font-weight: 700;">● ONLINE</span>
             </div>
             <div style="width: 44px;"></div>
         </nav>
@@ -137,6 +109,42 @@
         </form>
     </div>
 
-    <script type="module" src="../chat-logic/case-rain.js"></script>
+    <script type="module">
+        import { rainChat } from '../bot-logic/case-rain.js';
+
+        const chatForm = document.getElementById('chatForm');
+        const chatArea = document.getElementById('chatArea');
+        const inputMsg = document.getElementById('inputMsg');
+
+        const appendMsg = (text, type) => {
+            const div = document.createElement('div');
+            div.className = `bubble ${type}`;
+            div.innerHTML = text.replace(/\n/g, '<br>');
+            chatArea.appendChild(div);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        };
+
+        const reply = (text) => {
+            setTimeout(() => appendMsg(text, 'bot'), 500);
+        };
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msg = inputMsg.value.trim();
+            
+            if (!msg) return;
+
+            appendMsg(msg, 'user');
+            inputMsg.value = '';
+
+            const prefix = '.';
+            if (msg.startsWith(prefix)) {
+                const args = msg.slice(prefix.length).trim().split(/ +/);
+                const command = args.shift().toLowerCase();
+                
+                await rainChat({ text: msg }, { prefix, command, reply });
+            }
+        });
+    </script>
 </body>
 </html>
