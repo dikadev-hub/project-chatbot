@@ -1,11 +1,11 @@
 :root {
-    /* Palet Warna Premium */
     --bg-main: #0D0D0D;
     --surface: #151515;
     --accent: #00FFB2;
     --border: #2A2A2A;
     --text-primary: #FFFFFF;
     --text-secondary: #A0A0A0;
+    --sidebar-width: 280px;
 }
 
 * {
@@ -24,7 +24,6 @@ body {
     position: relative;
 }
 
-/* --- BACKGROUND EFFECTS --- */
 .cyber-grid {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -32,7 +31,7 @@ body {
         linear-gradient(var(--border) 1px, transparent 1px),
         linear-gradient(90deg, var(--border) 1px, transparent 1px);
     background-size: 30px 30px;
-    opacity: 0.2;
+    opacity: 0.15;
     z-index: -2;
 }
 
@@ -48,10 +47,93 @@ body {
 
 .app-container {
     padding: 24px;
-    padding-bottom: 120px; /* Ruang untuk bottom nav */
+    padding-bottom: 120px;
 }
 
-/* --- TOPBAR --- */
+.overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0; left: calc(-1 * var(--sidebar-width));
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    z-index: 999;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.sidebar-logo {
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border-radius: 16px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-link.active {
+    background: rgba(0, 255, 178, 0.05);
+    color: var(--accent);
+    border-color: rgba(0, 255, 178, 0.2);
+}
+
+.sidebar-link i { font-size: 24px; }
+
+.sidebar-footer {
+    margin-top: auto;
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: center;
+    letter-spacing: 2px;
+}
+
 .topbar {
     display: flex;
     justify-content: space-between;
@@ -68,12 +150,8 @@ body {
     display: flex; justify-content: center; align-items: center;
     font-size: 24px;
     cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.icon-btn:active {
-    transform: scale(0.95);
-    border-color: var(--text-secondary);
+    position: relative;
+    overflow: hidden;
 }
 
 .topbar-title {
@@ -90,6 +168,8 @@ body {
     background: var(--surface);
     padding: 2px;
     cursor: pointer;
+    overflow: hidden;
+    position: relative;
 }
 
 .profile-btn img {
@@ -98,51 +178,32 @@ body {
     object-fit: cover;
 }
 
-/* --- HEADER --- */
-.header-section {
-    margin-bottom: 32px;
-}
+.header-section { margin-bottom: 32px; }
+.header-section h1 { font-size: 34px; font-weight: 700; letter-spacing: -1px; }
+.header-section p { color: var(--text-secondary); font-size: 14px; }
 
-.header-section h1 {
-    font-size: 34px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    letter-spacing: -1px;
-}
-
-.header-section p {
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 400;
-}
-
-/* --- GRID DASHBOARD --- */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
-/* --- CARD STYLE (NEO BRUTALISM + GLOW) --- */
 .bot-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 24px; /* Rounded corner besar */
+    border-radius: 24px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer;
     position: relative;
     overflow: hidden;
 }
 
-/* Interaksi touch mobile: Smooth hover/touch effect */
-.bot-card:active, .bot-card:hover {
-    transform: scale(1.04) translateY(-2px);
-    border-color: var(--accent);
-    box-shadow: 0 8px 25px rgba(0, 255, 178, 0.15);
+.bot-card:active {
+    transform: scale(0.96);
 }
 
 .card-header {
@@ -172,35 +233,18 @@ body {
     color: var(--text-secondary);
 }
 
-.bot-name {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    letter-spacing: 0.5px;
-}
+.bot-name { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
 
-.bot-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
+.bot-status { display: flex; align-items: center; gap: 8px; }
 .status-dot {
     width: 8px; height: 8px;
     background: var(--accent);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--accent); /* Glow neon kecil */
+    box-shadow: 0 0 10px var(--accent);
     animation: pulseGlow 2s infinite;
 }
+.status-text { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; }
 
-.status-text {
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-}
-
-/* --- BOTTOM NAVIGATION --- */
 .bottom-nav {
     position: fixed;
     bottom: 24px;
@@ -208,16 +252,16 @@ body {
     transform: translateX(-50%);
     width: calc(100% - 48px);
     max-width: 400px;
-    background: rgba(21, 21, 21, 0.65);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(42, 42, 42, 0.6);
-    border-radius: 100px; /* Pill shape */
+    background: rgba(21, 21, 21, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(42, 42, 42, 0.8);
+    border-radius: 100px;
     display: flex;
     justify-content: space-between;
     padding: 8px 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
     z-index: 100;
+    overflow: hidden;
 }
 
 .nav-item {
@@ -230,31 +274,31 @@ body {
     text-decoration: none;
     color: var(--text-secondary);
     border-radius: 30px;
-    transition: all 0.3s ease;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
 }
 
-.nav-item i {
-    font-size: 24px;
-    transition: all 0.3s ease;
+.nav-item i { font-size: 24px; }
+.nav-item span { font-size: 9px; font-weight: 700; }
+.nav-item.active { color: var(--accent); }
+
+.ripple-effect {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 0.5s linear;
+    pointer-events: none;
 }
 
-.nav-item span {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1px;
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
-/* Tab Aktif Neon */
-.nav-item.active {
-    color: var(--accent);
-}
-
-.nav-item.active i {
-    filter: drop-shadow(0 0 12px rgba(0, 255, 178, 0.6));
-    transform: translateY(-2px);
-}
-
-/* Animasi status dot online */
 @keyframes pulseGlow {
     0% { box-shadow: 0 0 0 0 rgba(0, 255, 178, 0.4); }
     70% { box-shadow: 0 0 0 6px rgba(0, 255, 178, 0); }
