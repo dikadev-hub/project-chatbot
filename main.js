@@ -1,19 +1,44 @@
-const menuBtn = document.getElementById('menu-btn');
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menu-toggle');
+    const closeSidebar = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
 
-function toggleSidebar() {
-    sidebar.classList.toggle('-translate-x-full');
-    overlay.classList.toggle('hidden');
-}
+    const toggleSidebar = () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    };
 
-menuBtn.addEventListener('click', toggleSidebar);
-overlay.addEventListener('click', toggleSidebar);
+    if(menuToggle) menuToggle.addEventListener('click', toggleSidebar);
+    if(closeSidebar) closeSidebar.addEventListener('click', toggleSidebar);
+    if(overlay) overlay.addEventListener('click', toggleSidebar);
 
-/* Fungsi Navigasi dengan Delay Animasi */
-function navTo(url) {
-    // Memberikan sedikit jeda agar animasi klik (scale) terlihat dulu
-    setTimeout(() => {
-        window.location.href = url;
-    }, 150);
-}
+    const ripples = document.querySelectorAll('.ripple, .ripple-card, .nav-item, .sidebar-link');
+
+    ripples.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple-effect');
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+
+            this.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 500);
+
+            if (this.tagName === 'A' && this.getAttribute('href') !== '#' && !this.getAttribute('href').startsWith('javascript')) {
+                e.preventDefault();
+                const targetUrl = this.getAttribute('href');
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 300);
+            }
+        });
+    });
+});
