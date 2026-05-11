@@ -31,7 +31,7 @@
         /* NEOBRUTALISM CHARACTER - FULL KOTAK */
         .mc-char {
             width: 36px; height: 80px;
-            position: absolute;
+            position: fixed;
             z-index: 100;
             pointer-events: none;
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -193,7 +193,7 @@
     </header>
 
     <main id="main-content">
-        <div class="bg-[#FFDE00] border-4 border-black p-6 mb-6 shadow-[6px_6px_0_0_#000] console-banner neo-border" id="drama-box">
+        <div class="bg-[#FFDE00] border-4 border-black p-6 mb-6 shadow-[6px_6px_0_0_#000] console-banner neo-border relative" id="drama-box">
             <h2 class="text-2xl font-black uppercase tracking-wider mb-4">CONSOLE LOG</h2>
             <div class="console-floor"></div>
             <div class="console-text" id="console-log">sistem siap digunakan oleh user...</div>
@@ -319,196 +319,225 @@
                 legs[0].classList.add('walking-l'); 
                 legs[1].classList.add('walking-r'); 
             } else { 
-                legs[0].classList.remove('walking-l'); 
-                legs[1].classList.remove('walking-r'); 
+                legs[0].classList.remove('walking-l', 'walking-r'); 
+                legs[1].classList.remove('walking-l', 'walking-r'); 
             }
         }
 
         function resetArms(char) {
             const arms = char.querySelectorAll('.mc-arm');
-            arms[0].style.transform = 'rotate(0deg)';
-            arms[1].style.transform = 'rotate(0deg)';
+            arms.forEach(arm => arm.style.transform = 'rotate(0deg)');
         }
 
         function resetSit(char) {
             const legs = char.querySelectorAll('.mc-leg');
-            legs[0].style.transform = 'rotate(0deg)';
-            legs[1].style.transform = 'rotate(0deg)';
-            legs[0].classList.remove('sit-swing-l', 'sit-swing-r');
-            legs[1].classList.remove('sit-swing-l', 'sit-swing-r');
+            legs.forEach(leg => {
+                leg.style.transform = 'rotate(0deg)';
+                leg.classList.remove('sit-swing-l', 'sit-swing-r');
+            });
         }
 
         async function startDrama() {
-            const boxRect = box.getBoundingClientRect();
-            const consoleFloor = box.querySelector('.console-floor').getBoundingClientRect();
-            const navbarLine = document.querySelector('.navbar-top-line').getBoundingClientRect();
-            const navChat = document.getElementById('nav-chat').getBoundingClientRect();
-            const navFitur = document.getElementById('nav-fitur').getBoundingClientRect();
-            
-            // RESET SEMUA
-            dika.style.transition = dinda.style.transition = "none";
-            const floorY = consoleFloor.top + window.scrollY;
-            const navbarY = navbarLine.top + window.scrollY;
-            
-            // POSISI AWAL DI KIRI & KANAN CONSOLE FLOOR
-            dika.style.left = "25px"; dika.style.top = (floorY - 80) + "px";
-            dinda.style.left = (boxRect.width - 60) + "px"; dinda.style.top = (floorY - 80) + "px";
-            
-            hDika.style.transform = hDinda.style.transform = "rotateY(0deg)";
-            dika.style.opacity = dinda.style.opacity = "1";
-            dika.style.transform = dinda.style.transform = "rotate(0deg) translateY(0)";
-            resetArms(dika); resetArms(dinda); resetSit(dika); resetSit(dinda);
-            
-            dika.classList.remove('sad-bounce'); dinda.classList.remove('sad-bounce');
-            hDika.classList.remove('head-shake'); hDinda.classList.remove('head-shake');
-            
-            consoleLog.textContent = "sistem siap digunakan oleh user...";
-            await new Promise(r => setTimeout(r, 1500));
+            try {
+                // Get stable positions
+                const boxRect = box.getBoundingClientRect();
+                const consoleFloorRect = box.querySelector('.console-floor').getBoundingClientRect();
+                const navbarLineRect = document.querySelector('.navbar-top-line').getBoundingClientRect();
+                const navChatRect = document.getElementById('nav-chat').getBoundingClientRect();
+                const navFiturRect = document.getElementById('nav-fitur').getBoundingClientRect();
+                
+                // Convert to document coordinates
+                const floorY = consoleFloorRect.bottom + window.scrollY;
+                const navbarY = navbarLineRect.top + window.scrollY;
+                const boxRight = boxRect.right + window.scrollX;
+                
+                // RESET SEMUA
+                dika.style.transition = dinda.style.transition = "none";
+                dika.style.opacity = dinda.style.opacity = "1";
+                
+                // POSISI AWAL DI KIRI & KANAN CONSOLE FLOOR
+                dika.style.left = "25px"; 
+                dika.style.top = (floorY - 80) + "px";
+                dinda.style.left = (boxRect.width - 60) + "px"; 
+                dinda.style.top = (floorY - 80) + "px";
+                
+                hDika.style.transform = hDinda.style.transform = "rotateY(0deg)";
+                dika.style.transform = dinda.style.transform = "rotate(0deg) translateY(0)";
+                resetArms(dika); 
+                resetArms(dinda); 
+                resetSit(dika); 
+                resetSit(dinda);
+                
+                dika.classList.remove('sad-bounce'); 
+                dinda.classList.remove('sad-bounce');
+                hDika.classList.remove('head-shake'); 
+                hDinda.classList.remove('head-shake');
+                
+                consoleLog.textContent = "sistem siap digunakan oleh user...";
+                await new Promise(r => setTimeout(r, 1500));
 
-            // === BERANTEM DI CONSOLE ===
-            say(bDika, "dinda pagi~", 2500, 'left');
-            document.getElementById('arm-dika-r').style.transform = "rotate(25deg)";
-            await new Promise(r => setTimeout(r, 2800));
-            
-            say(bDinda, "pagi juga...", 2500, 'right');
-            document.getElementById('arm-dinda-r').style.transform = "rotate(-25deg)";
-            await new Promise(r => setTimeout(r, 2800));
-            resetArms(dika); resetArms(dinda);
+                // === BERANTEM DI CONSOLE ===
+                say(bDika, "dinda pagi~", 2500, 'left');
+                document.getElementById('arm-dika-r').style.transform = "rotate(25deg)";
+                await new Promise(r => setTimeout(r, 2800));
+                
+                say(bDinda, "pagi juga...", 2500, 'right');
+                document.getElementById('arm-dinda-r').style.transform = "rotate(-25deg)";
+                await new Promise(r => setTimeout(r, 2800));
+                resetArms(dika); 
+                resetArms(dinda);
 
-            say(bDinda, "eh dika kemarin katanya mau chat", 3500, 'right');
-            await new Promise(r => setTimeout(r, 3800));
-            
-            say(bDika, "eh iya sorry main game bentar...", 3000, 'left');
-            hDika.classList.add('head-shake');
-            await new Promise(r => setTimeout(r, 3300));
-            hDika.classList.remove('head-shake');
+                say(bDinda, "eh dika kemarin katanya mau chat", 3500, 'right');
+                await new Promise(r => setTimeout(r, 3800));
+                
+                say(bDika, "eh iya sorry main game bentar...", 3000, 'left');
+                hDika.classList.add('head-shake');
+                await new Promise(r => setTimeout(r, 3300));
+                hDika.classList.remove('head-shake');
 
-            say(bDinda, "MAIN GAME?! bohong!", 2800, 'right');
-            hDinda.style.transform = "rotateY(180deg)";
-            document.getElementById('arm-dinda-r').style.transform = "rotate(50deg)";
-            await new Promise(r => setTimeout(r, 3100));
-            resetArms(dinda);
+                say(bDinda, "MAIN GAME?! bohong!", 2800, 'right');
+                hDinda.style.transform = "rotateY(180deg)";
+                document.getElementById('arm-dinda-r').style.transform = "rotate(50deg)";
+                await new Promise(r => setTimeout(r, 3100));
+                resetArms(dinda);
 
-            // DIKA NYUSUL
-            say(bDika, "dinda jangan marah dong...", 3500, 'left');
-            dika.style.transition = "all 6s linear";
-            setWalk(dika, true);
-            dika.style.left = (boxRect.width - 115) + "px";
-            await new Promise(r => setTimeout(r, 6000));
-            setWalk(dika, false);
+                // DIKA NYUSUL
+                say(bDika, "dinda jangan marah dong...", 3500, 'left');
+                dika.style.transition = "left 6s linear";
+                setWalk(dika, true);
+                dika.style.left = (boxRect.width - 115) + "px";
+                await new Promise(r => setTimeout(r, 6000));
+                setWalk(dika, false);
 
-            say(bDika, "aku janji ga gitu lagi...", 3000);
-            await new Promise(r => setTimeout(r, 3300));
+                say(bDika, "aku janji ga gitu lagi...", 3000);
+                await new Promise(r => setTimeout(r, 3300));
 
-            // DINDA TOLAK
-            say(bDinda, "udah! pergi sana!", 2500, 'right');
-            document.getElementById('arm-dinda-l').style.transform = "rotate(-130deg)";
-            dika.style.transition = "all 1s ease-out";
-            dika.style.left = (boxRect.width - 165) + "px";
-            dika.style.transform = "rotate(-20deg)";
-            await new Promise(r => setTimeout(r, 1200));
-            resetArms(dinda); dika.style.transform = "rotate(0deg)";
+                // DINDA TOLAK
+                say(bDinda, "udah! pergi sana!", 2500, 'right');
+                document.getElementById('arm-dinda-l').style.transform = "rotate(-130deg)";
+                dika.style.transition = "all 1s ease-out";
+                dika.style.left = (boxRect.width - 165) + "px";
+                dika.style.transform = "rotate(-20deg)";
+                await new Promise(r => setTimeout(r, 1200));
+                resetArms(dinda); 
+                dika.style.transform = "rotate(0deg)";
 
-            // DIKA SEDIH KE PINGGIR
-            dika.classList.add('sad-bounce');
-            say(bDika, "ya udah... aku pergi deh...", 3500, 'left');
-            await new Promise(r => setTimeout(r, 3800));
-            dika.classList.remove('sad-bounce');
-            
-            dika.style.transition = "all 7s linear";
-            setWalk(dika, true); hDika.style.transform = "rotateY(180deg)";
-            dika.style.left = "20px";
-            await new Promise(r => setTimeout(r, 7000));
-            setWalk(dika, false);
+                // DIKA SEDIH KE PINGGIR
+                dika.classList.add('sad-bounce');
+                say(bDika, "ya udah... aku pergi deh...", 3500, 'left');
+                await new Promise(r => setTimeout(r, 3800));
+                dika.classList.remove('sad-bounce');
+                
+                dika.style.transition = "left 7s linear";
+                setWalk(dika, true); 
+                hDika.style.transform = "rotateY(180deg)";
+                dika.style.left = "20px";
+                await new Promise(r => setTimeout(r, 7000));
+                setWalk(dika, false);
 
-            // === DIKA TURUN KE GARIS NAVBAR CHAT ===
-            consoleLog.textContent = "dika pindah ke chat...";
-            dika.style.transition = "all 5s cubic-bezier(0.25, 0.1, 0.25, 1)";
-            const chatCenter = navChat.left + (navChat.width / 2) - 18;
-            dika.style.left = chatCenter + "px";
-            dika.style.top = (navbarY - 80) + "px"; // GARIS ATAS NAVBAR
-            await new Promise(r => setTimeout(r, 5200));
+                // === DIKA TURUN KE GARIS NAVBAR CHAT ===
+                consoleLog.textContent = "dika pindah ke chat...";
+                dika.style.transition = "all 5s cubic-bezier(0.25, 0.1, 0.25, 1)";
+                const chatCenter = navChatRect.left + (navChatRect.width / 2) - 18 + window.scrollX;
+                dika.style.left = chatCenter + "px";
+                dika.style.top = (navbarY - 80) + "px";
+                await new Promise(r => setTimeout(r, 5200));
 
-            // DIKA DUDUK DI GARIS CHAT
-            dika.style.transition = "all 1.2s ease-out";
-            dika.style.transform = "translateY(28px)"; // DUDUK DI GARIS
-            hDika.style.transform = "rotateY(0deg)";
-            const dikaLegs = dika.querySelectorAll('.mc-leg');
-            dikaLegs[0].style.transform = "rotate(40deg)";
-            dikaLegs[1].style.transform = "rotate(60deg)";
-            dikaLegs[0].classList.add('sit-swing-l');
-            dikaLegs[1].classList.add('sit-swing-r');
+                // DIKA DUDUK DI GARIS CHAT
+                dika.style.transition = "all 1.2s ease-out";
+                dika.style.transform = "translateY(28px)";
+                hDika.style.transform = "rotateY(0deg)";
+                const dikaLegs = dika.querySelectorAll('.mc-leg');
+                dikaLegs[0].style.transform = "rotate(40deg)";
+                dikaLegs[1].style.transform = "rotate(60deg)";
+                dikaLegs[0].classList.add('sit-swing-l');
+                dikaLegs[1].classList.add('sit-swing-r');
 
-            const laguSedih = ["ingin rasanya", "aku menangis", "merindukan kamu", "dinda sayangku"];
-            dika.classList.add('sad-bounce');
-            for(let lirik of laguSedih) { 
-                say(bDika, lirik, 3200); 
-                await new Promise(r => setTimeout(r, 3500)); 
+                const laguSedih = ["ingin rasanya", "aku menangis", "merindukan kamu", "dinda sayangku"];
+                dika.classList.add('sad-bounce');
+                for(let lirik of laguSedih) { 
+                    say(bDika, lirik, 3200); 
+                    await new Promise(r => setTimeout(r, 3500)); 
+                }
+                dika.classList.remove('sad-bounce');
+
+                // === DINDA KASIHAN & NYUSUL ===
+                consoleLog.textContent = "dinda mulai kasihan...";
+                say(bDinda, "kasian sih dika...", 3500, 'right');
+                hDinda.classList.add('head-shake');
+                await new Promise(r => setTimeout(r, 3800));
+                hDinda.classList.remove('head-shake');
+
+                dinda.style.transition = "left 8s linear";
+                setWalk(dinda, true); 
+                hDinda.style.transform = "rotateY(180deg)";
+                dinda.style.left = "35px";
+                await new Promise(r => setTimeout(r, 8000));
+                setWalk(dinda, false);
+
+                // DINDA TURUN KE GARIS NAVBAR FITUR
+                dinda.style.transition = "all 5s cubic-bezier(0.25, 0.1, 0.25, 1)";
+                const fiturCenter = navFiturRect.left + (navFiturRect.width / 2) - 18 + window.scrollX;
+                dinda.style.left = fiturCenter + "px";
+                dinda.style.top = (navbarY - 80) + "px";
+                await new Promise(r => setTimeout(r, 5200));
+
+                // DINDA DUDUK DI GARIS FITUR
+                dinda.style.transition = "all 1.2s ease-out";
+                dinda.style.transform = "translateY(28px)";
+                hDinda.style.transform = "rotateY(180deg)";
+                const dindaLegs = dinda.querySelectorAll('.mc-leg');
+                dindaLegs[0].style.transform = "rotate(40deg)";
+                dindaLegs[1].style.transform = "rotate(60deg)";
+                dindaLegs[0].classList.add('sit-swing-l');
+                dindaLegs[1].classList.add('sit-swing-r');
+
+                // MAHAFAN
+                consoleLog.textContent = "rekonsiliasi...";
+                say(bDinda, "maafin aku ya dika...", 3500);
+                document.getElementById('arm-dinda-l').style.transform = "rotate(-85deg)";
+                await new Promise(r => setTimeout(r, 3800));
+                
+                say(bDika, "aku juga sayang dinda...", 3500);
+                document.getElementById('arm-dika-r').style.transform = "rotate(30deg)";
+                await new Promise(r => setTimeout(r, 3800));
+
+                // PELUK DI TENGAH
+                dika.style.transition = dinda.style.transition = "left 3s ease-in-out";
+                const meetX = (chatCenter + fiturCenter) / 2 - 18;
+                dika.style.left = meetX + "px";
+                dinda.style.left = (meetX + 35) + "px";
+                say(bDinda, "ayo pulang yuk...", 4000);
+                await new Promise(r => setTimeout(r, 4500));
+
+                // GANDENGAN TANGAN PULANG
+                dika.style.transition = dinda.style.transition = "left 9s linear";
+                setWalk(dika, true); 
+                setWalk(dinda, true);
+                hDika.style.transform = hDinda.style.transform = "rotateY(0deg)";
+                document.getElementById('arm-dika-r').style.transform = "rotate(-25deg)";
+                document.getElementById('arm-dinda-l').style.transform = "rotate(25deg)";
+                dika.style.left = "125%"; 
+                dinda.style.left = "135%";
+                
+                await new Promise(r => setTimeout(r, 9500));
+                consoleLog.textContent = "loop dimulai lagi...";
+                
+                // Small delay before restart
+                await new Promise(r => setTimeout(r, 1000));
+                startDrama();
+                
+            } catch(error) {
+                console.error('Drama error:', error);
+                // Restart after error
+                setTimeout(startDrama, 2000);
             }
-            dika.classList.remove('sad-bounce');
-
-            // === DINDA KASIHAN & NYUSUL ===
-            consoleLog.textContent = "dinda mulai kasihan...";
-            say(bDinda, "kasian sih dika...", 3500, 'right');
-            hDinda.classList.add('head-shake');
-            await new Promise(r => setTimeout(r, 3800));
-            hDinda.classList.remove('head-shake');
-
-            dinda.style.transition = "all 8s linear";
-            setWalk(dinda, true); hDinda.style.transform = "rotateY(180deg)";
-            dinda.style.left = "35px";
-            await new Promise(r => setTimeout(r, 8000));
-            setWalk(dinda, false);
-
-            // DINDA TURUN KE GARIS NAVBAR FITUR
-            dinda.style.transition = "all 5s cubic-bezier(0.25, 0.1, 0.25, 1)";
-            const fiturCenter = navFitur.left + (navFitur.width / 2) - 18;
-            dinda.style.left = fiturCenter + "px";
-            dinda.style.top = (navbarY - 80) + "px"; // GARIS ATAS NAVBAR
-            await new Promise(r => setTimeout(r, 5200));
-
-            // DINDA DUDUK DI GARIS FITUR
-            dinda.style.transition = "all 1.2s ease-out";
-            dinda.style.transform = "translateY(28px)";
-            hDinda.style.transform = "rotateY(180deg)";
-            const dindaLegs = dinda.querySelectorAll('.mc-leg');
-            dindaLegs[0].style.transform = "rotate(40deg)";
-            dindaLegs[1].style.transform = "rotate(60deg)";
-            dindaLegs[0].classList.add('sit-swing-l');
-            dindaLegs[1].classList.add('sit-swing-r');
-
-            // MAHAFAN
-            consoleLog.textContent = "rekonsiliasi...";
-            say(bDinda, "maafin aku ya dika...", 3500);
-            document.getElementById('arm-dinda-l').style.transform = "rotate(-85deg)";
-            await new Promise(r => setTimeout(r, 3800));
-            
-            say(bDika, "aku juga sayang dinda...", 3500);
-            document.getElementById('arm-dika-r').style.transform = "rotate(30deg)";
-            await new Promise(r => setTimeout(r, 3800));
-
-            // PELUK DI TENGAH
-            dika.style.transition = dinda.style.transition = "all 3s ease-in-out";
-            const meetX = (chatCenter + fiturCenter) / 2 - 18;
-            dika.style.left = meetX + "px";
-            dinda.style.left = (meetX + 35) + "px";
-            say(bDinda, "ayo pulang yuk...", 4000);
-            await new Promise(r => setTimeout(r, 4500));
-
-            // GANDENGAN TANGAN PULANG
-            dika.style.transition = dinda.style.transition = "all 9s linear";
-            setWalk(dika, true); setWalk(dinda, true);
-            hDika.style.transform = hDinda.style.transform = "rotateY(0deg)";
-            document.getElementById('arm-dika-r').style.transform = "rotate(-25deg)";
-            document.getElementById('arm-dinda-l').style.transform = "rotate(25deg)";
-            dika.style.left = "125%"; dinda.style.left = "135%";
-            
-            await new Promise(r => setTimeout(r, 9500));
-            consoleLog.textContent = "loop dimulai lagi...";
-            startDrama();
         }
 
-        window.onload = startDrama;
+        // Start drama when page loads
+        window.addEventListener('load', () => {
+            setTimeout(startDrama, 500);
+        });
     </script>
 </body>
 </html>
