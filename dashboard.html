@@ -5,225 +5,541 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dika Dev Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #E2E2E2;
+            --bg-color: #F5F5F5;
             --accent-color: #FFDE00;
+            --accent-dark: #E6C200;
             --border-color: #000000;
             --skin: #FFDBAC;
+            --skin-dark: #E8B894;
             --hair-dika: #5D3A1A;
             --hair-dinda: #FF71CD;
             --shirt-dika: #00A896;
             --shirt-dinda: #FF4E88;
-            --pants: #333;
+            --pants: #2A2A2A;
+            --shadow-1: 0 0 0 3px #000;
+            --shadow-2: 6px 6px 0 0 #000;
+            --shadow-3: 12px 12px 0 0 #000;
+            --shadow-inner: inset 3px 3px 0 0 rgba(0,0,0,0.3);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Public Sans', sans-serif;
-            background-color: var(--bg-color);
+            background: linear-gradient(135deg, var(--bg-color) 0%, #E8E8E8 100%);
             margin: 0; padding: 0; overflow: hidden; 
-            height: 100vh; color: #000; display: flex; flex-direction: column;
+            height: 100vh; color: #000; 
+            display: flex; flex-direction: column;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
-        .neo-border { border: 3px solid #000; box-shadow: 5px 5px 0px 0px #000; }
+        /* NEOBRUTALISM CORE */
+        .neo-border { 
+            border: 4px solid #000; 
+            box-shadow: var(--shadow-2);
+        }
+        .neo-border-heavy { 
+            border: 5px solid #000; 
+            box-shadow: var(--shadow-3);
+        }
+        .neo-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .neo-hover:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-3);
+        }
+        .neo-press {
+            transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .neo-press:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--shadow-1);
+        }
 
-        /* NEOBRUTALISM CHARACTER - FULL KOTAK - FIXED POSITION */
+        /* ENHANCED CHARACTERS - BETTER PROPORTIONS */
         .mc-char {
-            width: 36px; height: 80px;
+            width: 42px; height: 92px;
             position: fixed;
             z-index: 100;
             pointer-events: none;
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.5));
         }
         .mc-head {
-            width: 26px; height: 26px; background: var(--skin);
-            border: 3px solid black; position: absolute; top: 0; left: 5px;
-            box-shadow: inset 2px 2px 0px rgba(0,0,0,0.3);
+            width: 32px; height: 32px; 
+            background: linear-gradient(145deg, var(--skin), var(--skin-dark));
+            border: 4px solid #000; 
+            position: absolute; 
+            top: 0; left: 5px;
+            box-shadow: var(--shadow-inner), 2px 2px 0px rgba(0,0,0,0.4);
+            border-radius: 50% 50% 45% 45%;
         }
         .mc-hair { 
-            width: 100%; height: 7px; border-bottom: 2px solid black;
-            position: absolute; top: 0; left: 0; box-shadow: inset 1px 1px 0px rgba(0,0,0,0.2);
+            width: 100%; height: 10px; 
+            border-bottom: 3px solid #000;
+            position: absolute; top: 0; left: 0; 
+            box-shadow: var(--shadow-inner);
+            border-radius: 50% 50% 0 0;
         }
         .eye-row { 
-            display: flex; justify-content: space-between; padding: 5px 3px 0; 
-            position: absolute; top: 8px; left: 0; right: 0;
+            display: flex; 
+            justify-content: space-between; 
+            padding: 6px 4px 0; 
+            position: absolute; 
+            top: 10px; left: 0; right: 0;
         }
         .mc-eye { 
-            width: 4px; height: 3px; background: white; border: 2px solid black; 
-            position: relative; box-shadow: inset 1px 1px 0px rgba(0,0,0,0.2);
+            width: 6px; height: 4px; 
+            background: #FFF; 
+            border: 2px solid #000; 
+            position: relative; 
+            box-shadow: var(--shadow-inner);
+            border-radius: 50%;
         }
         .mc-eye::after { 
-            content: ''; position: absolute; width: 1.5px; height: 1.5px; 
-            background: #333; right: 0; bottom: 0; box-shadow: 0.5px 0.5px 0px white;
+            content: ''; 
+            position: absolute; 
+            width: 2px; height: 2px; 
+            background: #333; 
+            right: 0.5px; bottom: 0.5px; 
+            border-radius: 50%;
+            box-shadow: 0.5px 0.5px 0px #FFF;
+        }
+        .mc-mouth {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 6px;
+            border: 2px solid #000;
+            border-top: none;
+            border-radius: 0 0 50% 50%;
+            background: var(--skin);
         }
         .mc-body { 
-            width: 26px; height: 28px; border: 3px solid black; 
-            position: absolute; top: 24px; left: 5px;
-            box-shadow: inset 2px 2px 0px rgba(0,0,0,0.3);
+            width: 32px; height: 34px; 
+            border: 4px solid #000; 
+            position: absolute; 
+            top: 30px; left: 5px;
+            box-shadow: var(--shadow-inner);
         }
         .mc-arm { 
-            width: 8px; height: 24px; background: var(--skin); 
-            border: 3px solid black; position: absolute; top: 26px; 
-            transform-origin: top center; transition: all 0.6s;
-            box-shadow: inset 1px 1px 0px rgba(0,0,0,0.2);
+            width: 10px; height: 28px; 
+            background: linear-gradient(145deg, var(--skin), var(--skin-dark)); 
+            border: 3px solid #000; 
+            position: absolute; 
+            top: 32px; 
+            transform-origin: top center; 
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: var(--shadow-inner);
         }
         .mc-leg { 
-            width: 10px; height: 27px; background: var(--pants); 
-            border: 3px solid black; position: absolute; top: 51px; 
-            transform-origin: top center; box-shadow: inset 1px 1px 0px rgba(0,0,0,0.2);
+            width: 12px; height: 32px; 
+            background: linear-gradient(145deg, var(--pants), #1A1A1A); 
+            border: 4px solid #000; 
+            position: absolute; 
+            top: 60px; 
+            transform-origin: top center; 
+            box-shadow: var(--shadow-inner);
         }
         
-        .dika .mc-hair { background: var(--hair-dika); }
-        .dika .mc-body { background: var(--shirt-dika); }
-        .dinda .mc-hair { background: var(--hair-dinda); }
-        .dinda .mc-body { background: var(--shirt-dinda); }
+        .dika .mc-hair { background: linear-gradient(145deg, var(--hair-dika), #8B5A2B); }
+        .dika .mc-body { background: linear-gradient(145deg, var(--shirt-dika), #08926B); }
+        .dinda .mc-hair { background: linear-gradient(145deg, var(--hair-dinda), #FF4DBA); }
+        .dinda .mc-body { background: linear-gradient(145deg, var(--shirt-dinda), #FF2A6E); }
 
-        /* Animations */
-        @keyframes walk { 0%, 100% { transform: rotate(-25deg); } 50% { transform: rotate(25deg); } }
-        @keyframes walk-alt { 0%, 100% { transform: rotate(25deg); } 50% { transform: rotate(-25deg); } }
-        .walking-l { animation: walk 0.45s infinite; }
-        .walking-r { animation: walk-alt 0.45s infinite; }
-        @keyframes sitSwing { 0%, 100% { transform: rotate(30deg); } 50% { transform: rotate(60deg); } }
-        .sit-swing-l { animation: sitSwing 1.2s infinite ease-in-out; }
-        .sit-swing-r { animation: sitSwing 1.2s infinite ease-in-out 0.3s; }
-        @keyframes headShake { 0%, 100% { transform: translateX(0) rotate(0deg); } 25% { transform: translateX(-2px) rotate(-3deg); } 75% { transform: translateX(2px) rotate(3deg); } }
-        @keyframes armWave { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(40deg); } }
-        @keyframes sadBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        /* SMOOTH ANIMATIONS */
+        @keyframes walk-left { 
+            0%, 100% { transform: rotate(-20deg) translateY(0px); } 
+            25% { transform: rotate(-10deg) translateY(-2px); }
+            50% { transform: rotate(0deg) translateY(-4px); }
+            75% { transform: rotate(10deg) translateY(-2px); }
+        }
+        @keyframes walk-right { 
+            0%, 100% { transform: rotate(20deg) translateY(0px); } 
+            25% { transform: rotate(10deg) translateY(-2px); }
+            50% { transform: rotate(0deg) translateY(-4px); }
+            75% { transform: rotate(-10deg) translateY(-2px); }
+        }
+        @keyframes sitSwing-left { 
+            0%, 100% { transform: rotate(35deg) translateX(2px); } 
+            50% { transform: rotate(55deg) translateX(4px); }
+        }
+        @keyframes sitSwing-right { 
+            0%, 100% { transform: rotate(65deg) translateX(-2px); } 
+            50% { transform: rotate(45deg) translateX(-4px); }
+        }
+        @keyframes headShake { 
+            0%, 100% { transform: translateX(0) rotate(0deg); } 
+            20% { transform: translateX(-3px) rotate(-4deg); } 
+            40% { transform: translateX(3px) rotate(4deg); }
+            60% { transform: translateX(-2px) rotate(-2deg); }
+            80% { transform: translateX(2px) rotate(2deg); }
+        }
+        @keyframes armWave { 
+            0%, 100% { transform: rotate(-20deg) translateY(0px); } 
+            25% { transform: rotate(0deg) translateY(-2px); }
+            50% { transform: rotate(45deg) translateY(-4px); }
+            75% { transform: rotate(20deg) translateY(-2px); }
+        }
+        @keyframes sadBounce { 
+            0%, 100% { transform: translateY(0) scale(1); } 
+            30% { transform: translateY(-3px) scale(0.98); }
+            60% { transform: translateY(-1px) scale(1.02); }
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.12); }
+            70% { transform: scale(1); }
+        }
 
-        .head-shake { animation: headShake 0.7s ease-in-out; }
-        .arm-wave { animation: armWave 1.2s infinite; }
-        .sad-bounce { animation: sadBounce 0.6s infinite; }
+        .walking-l { animation: walk-left 0.6s infinite ease-in-out; }
+        .walking-r { animation: walk-right 0.6s infinite ease-in-out 0.2s; }
+        .sit-swing-l { animation: sitSwing-left 1.8s infinite ease-in-out; }
+        .sit-swing-r { animation: sitSwing-right 1.8s infinite ease-in-out 0.4s; }
+        .head-shake { animation: headShake 1s ease-in-out; }
+        .arm-wave { animation: armWave 1.5s infinite ease-in-out; }
+        .sad-bounce { animation: sadBounce 0.8s infinite ease-in-out; }
+        .heart-beat { animation: heartBeat 1.2s infinite; }
 
-        /* FIXED SPEECH BUBBLE - PANJANG & LEBIH BACA */
+        /* ENHANCED SPEECH BUBBLE */
         .bubble {
             position: absolute; 
-            background: white; 
-            border: 4px solid black;
-            padding: 12px 18px; /* LEBIH BESAR PADDING */
-            font-size: 11px; /* LEBIH BESAR FONT */
+            background: linear-gradient(145deg, #FFF, #F8F8F8); 
+            border: 4px solid #000;
+            padding: 16px 20px;
+            font-size: 12px;
             font-weight: 900; 
             text-transform: uppercase;
-            top: -90px; /* POSISI LEBIH TINGGI */
+            letter-spacing: 1.2px;
+            top: -110px;
             left: 50%; 
             transform: translateX(-50%);
             display: none; 
             z-index: 110;
-            box-shadow: 8px 8px 0px black;
+            box-shadow: var(--shadow-3), inset 2px 2px 0px rgba(255,255,255,0.5);
             font-family: 'Public Sans', sans-serif;
-            letter-spacing: 1px; 
-            line-height: 1.3; /* LEBIH BAIK LINE HEIGHT */
+            line-height: 1.4;
             white-space: normal;
-            max-width: 220px; /* LEBIH PANJANG */
-            min-width: 120px; /* MINIMUM LEBIH PANJANG */
+            max-width: 260px;
+            min-width: 140px;
             text-align: center;
             word-break: break-word;
-            border-radius: 0; /* NEOBRUTAL NO RADIUS */
+            border-radius: 0;
         }
         .bubble::after {
             content: ''; 
             position: absolute; 
-            bottom: -17px; 
+            bottom: -21px; 
             left: 50%;
             transform: translateX(-50%); 
-            width: 0; 
-            height: 0;
-            border-left: 15px solid transparent; 
-            border-right: 15px solid transparent;
-            border-top: 17px solid black;
+            width: 0; height: 0;
+            border-left: 18px solid transparent; 
+            border-right: 18px solid transparent;
+            border-top: 21px solid #000;
         }
         .bubble::before {
             content: ''; 
             position: absolute; 
-            bottom: -11px; 
+            bottom: -15px; 
             left: 50%;
             transform: translateX(-50%); 
-            width: 0; 
-            height: 0;
-            border-left: 12px solid transparent; 
-            border-right: 12px solid transparent;
-            border-top: 12px solid white;
+            width: 0; height: 0;
+            border-left: 14px solid transparent; 
+            border-right: 14px solid transparent;
+            border-top: 15px solid #FFF;
         }
 
-        #sidebar { transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1); z-index: 120; }
-        .sidebar-hidden { transform: translateX(-110%); }
-        .sidebar-visible { transform: translateX(0); }
-        #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 115; backdrop-filter: blur(4px); }
+        /* SIDEBAR */
+        #sidebar { 
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            z-index: 120; 
+            backdrop-filter: blur(20px);
+        }
+        .sidebar-hidden { transform: translateX(-100%) skew(-5deg); }
+        .sidebar-visible { transform: translateX(0) skew(0deg); }
+        #overlay { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.7); 
+            z-index: 115; 
+            backdrop-filter: blur(8px); 
+        }
 
-        header { height: 60px; background: white; border-bottom: 3px solid black; display: flex; align-items: center; padding: 0 1rem; justify-content: space-between; flex-shrink: 0; }
-        main { flex-grow: 1; overflow-y: auto; padding: 1rem; padding-bottom: 100px; }
+        /* HEADER */
+        header { 
+            height: 72px; 
+            background: linear-gradient(145deg, #FFF, #F8F8F8); 
+            border-bottom: 6px solid #000; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 1.5rem; 
+            justify-content: space-between; 
+            flex-shrink: 0;
+            box-shadow: var(--shadow-2);
+        }
 
+        /* MAIN CONTENT */
+        main { 
+            flex-grow: 1; 
+            overflow-y: auto; 
+            padding: 1.5rem; 
+            padding-bottom: 120px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        main::-webkit-scrollbar { display: none; }
+
+        /* ULTIMATE BOTTOM NAV */
         .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; right: 0; height: 80px; /* LEBIH TINGGI */
-            background: white; border-top: 6px solid black; 
-            display: flex; align-items: center; z-index: 50; 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            height: 96px;
+            background: linear-gradient(145deg, #FFF, #F8F8F8); 
+            border-top: 8px solid #000; 
+            display: flex; 
+            align-items: center; 
+            z-index: 50; 
             padding-bottom: env(safe-area-inset-bottom);
-            box-shadow: -6px 0px 0px black;
+            box-shadow: var(--shadow-3);
         }
         .nav-item { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            font-weight: 900; text-transform: uppercase; font-size: 0.75rem; /* FONT LEBIH BESAR */
-            flex: 1; height: 100%; 
-            color: #000; text-decoration: none; position: relative; 
-            border-right: 3px solid black; /* BORDER ANTAR ITEM */
-            transition: all 0.2s ease;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            flex: 1; 
+            height: 100%; 
+            color: #000; 
+            text-decoration: none; 
+            position: relative; 
+            border-right: 4px solid #000;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
         }
         .nav-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 0 black;
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-3);
         }
         .nav-item:last-child { border-right: none; }
         .nav-item.active { 
-            background: var(--accent-color); 
-            box-shadow: inset 4px 4px 0px black, 0 6px 0 black; /* SHADOW LEBIH TEBAL */
-            transform: translateY(-2px);
+            background: linear-gradient(145deg, var(--accent-color), var(--accent-dark)); 
+            box-shadow: var(--shadow-3), inset 4px 4px 0px rgba(0,0,0,0.2);
+            transform: translateY(-4px) scale(1.02);
         }
         .nav-icon { 
-            width: 32px; height: 32px; /* LEBIH BESAR */
-            margin-bottom: 4px; /* SPASI LEBIH BAIK */
-            display: flex; align-items: center; justify-content: center; 
-            border: 3px solid black; /* BORDER ICON */
-            background: white;
-            box-shadow: 2px 2px 0 black;
+            width: 40px; 
+            height: 40px;
+            margin-bottom: 6px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border: 4px solid #000;
+            background: #FFF;
+            box-shadow: var(--shadow-2);
+            transition: all 0.3s ease;
         }
         .nav-item.active .nav-icon {
             background: var(--accent-color);
-            box-shadow: inset 2px 2px 0 black;
+            box-shadow: var(--shadow-inner), 2px 2px 0px #000;
+            transform: scale(1.1);
         }
         .nav-divider { 
-            width: 8px; /* LEBIH LEBAT */
-            height: 55px; 
-            background: black; 
-            box-shadow: 4px 0px 0px black, -4px 0px 0px black; /* DOUBLE SHADOW */
-            border-radius: 0;
+            width: 12px;
+            height: 70px; 
+            background: linear-gradient(145deg, #000, #333); 
+            box-shadow: 
+                6px 0px 0px rgba(0,0,0,0.4), 
+                -6px 0px 0px rgba(0,0,0,0.4),
+                inset 2px 2px 0px rgba(255,255,255,0.2);
         }
 
-        /* NAVBAR TOP LINE - GARIS YANG DIJADIIN KURSI */
+        /* NAVBAR TOP LINE - KURSI MEWAH */
         .navbar-top-line {
-            position: absolute; top: -6px; left: 0; right: 0; height: 8px; /* LEBIH TEBAL */
-            background: black; z-index: 55; box-shadow: 0px 4px 0px rgba(0,0,0,0.5);
+            position: absolute; 
+            top: -10px; 
+            left: 0; 
+            right: 0; 
+            height: 12px;
+            background: linear-gradient(90deg, #000 0%, #333 50%, #000 100%); 
+            z-index: 55; 
+            box-shadow: 
+                0px 6px 0px rgba(0,0,0,0.6),
+                inset 0px 2px 0px rgba(255,255,255,0.3);
+            border-radius: 0 0 50% 50%;
         }
 
-        .main-card { background: white; border: 3px solid black; box-shadow: 6px 6px 0px black; margin-bottom: 1.5rem; cursor: pointer; }
-        .photo-frame { width: 100%; height: 200px; border-bottom: 3px solid black; overflow: hidden; position: relative; background-color: #000; }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; }
-        .online-badge { position: absolute; top: 10px; right: 10px; background: #00FF00; border: 2px solid black; padding: 2px 8px; font-weight: 900; font-size: 0.6rem; box-shadow: 2px 2px 0px black; }
-        .next-update-card { border: 3px dashed #888; padding: 1.5rem; text-align: center; font-weight: 900; font-style: italic; color: #888; background: rgba(255,255,255,0.5); box-shadow: 4px 4px 0px black; margin-bottom: 1rem; }
-        .btn-arrow { width: 35px; height: 35px; background: var(--accent-color); border: 3px solid black; display: flex; align-items: center; justify-content: center; box-shadow: 3px 3px 0px black; }
+        /* CARDS */
+        .main-card { 
+            background: linear-gradient(145deg, #FFF, #F8F8F8); 
+            border: 4px solid #000; 
+            box-shadow: var(--shadow-3); 
+            margin-bottom: 2rem; 
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .main-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 16px 16px 0px rgba(0,0,0,0.8);
+        }
+        .photo-frame { 
+            width: 100%; 
+            height: 220px; 
+            border-bottom: 5px solid #000; 
+            overflow: hidden; 
+            position: relative; 
+            background: #000;
+        }
+        .photo-frame img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            object-position: 50% 20%; 
+            display: block;
+            transition: transform 0.6s ease;
+        }
+        .main-card:hover .photo-frame img {
+            transform: scale(1.05);
+        }
+        .online-badge { 
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            background: linear-gradient(145deg, #00FF00, #00E600); 
+            border: 3px solid #000; 
+            padding: 4px 12px; 
+            font-weight: 900; 
+            font-size: 0.75rem; 
+            box-shadow: var(--shadow-2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: var(--shadow-2); }
+            50% { box-shadow: 0 0 20px rgba(0,255,0,0.6), var(--shadow-2); }
+        }
+        .btn-arrow { 
+            width: 44px; 
+            height: 44px; 
+            background: linear-gradient(145deg, var(--accent-color), var(--accent-dark)); 
+            border: 4px solid #000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: var(--shadow-2);
+            transition: all 0.3s ease;
+        }
+        .btn-arrow:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: var(--shadow-3);
+        }
 
+        /* CONSOLE */
         .console-banner { 
-            position: relative; min-height: 200px; overflow: visible;
-            border-bottom: 6px solid black; box-shadow: 0px 6px 0px black;
+            position: relative; 
+            min-height: 240px; 
+            overflow: visible;
+            border: 5px solid #000;
+            box-shadow: var(--shadow-3);
+            background: linear-gradient(145deg, #FFDE00, var(--accent-dark));
         }
         .console-floor {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 6px; 
-            background: black; z-index: 10; box-shadow: 0px 3px 0px rgba(0,0,0,0.5);
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            height: 12px; 
+            background: linear-gradient(90deg, #000 0%, #333 50%, #000 100%); 
+            z-index: 10; 
+            box-shadow: 0px 6px 0px rgba(0,0,0,0.6);
+            border-radius: 0 0 20px 20px;
         }
         .console-text {
-            position: absolute; bottom: 15px; left: 15px; right: 15px;
-            font-size: 11px; font-weight: 900; text-transform: uppercase;
-            background: rgba(255,255,255,0.9); padding: 8px 12px;
-            border: 3px solid black; box-shadow: 4px 4px 0px black;
+            position: absolute; 
+            bottom: 30px; 
+            left: 20px; 
+            right: 20px;
+            font-size: 13px; 
+            font-weight: 900; 
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,248,248,0.9)); 
+            padding: 12px 18px;
+            border: 4px solid #000; 
+            box-shadow: var(--shadow-3);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+
+        /* NEXT UPDATE */
+        .next-update-card { 
+            border: 4px dashed #666; 
+            padding: 2.5rem; 
+            text-align: center; 
+            font-weight: 900; 
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #666; 
+            background: linear-gradient(145deg, rgba(255,255,255,0.7), rgba(248,248,248,0.6)); 
+            box-shadow: var(--shadow-2);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .next-update-card::before {
+            content: '🔥 SOON';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(255,222,0,0.3);
+            z-index: 0;
+        }
+        .next-update-card span {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,248,248,0.8));
+            padding: 8px 16px;
+            display: inline-block;
+            box-shadow: inset 2px 2px 0px rgba(255,255,255,1);
+        }
+
+        /* SIDEBAR BUTTONS */
+        .sidebar-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .sidebar-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+        .sidebar-btn:hover::before {
+            left: 100%;
         }
     </style>
 </head>
@@ -231,163 +547,213 @@
 
     <div id="overlay" onclick="toggleSidebar()"></div>
 
-    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white border-r-4 border-black p-6 sidebar-hidden flex flex-col">
-        <h1 class="text-2xl font-black italic mb-8 underline uppercase">Dika Menu</h1>
-        <nav class="space-y-4">
-            <button class="w-full p-3 neo-border bg-[#00E6FF] font-black text-left uppercase">PROFILE</button>
-            <button onclick="handleNav('setting/setting.html')" class="w-full p-3 neo-border bg-[#FF71CD] font-black text-left uppercase">SETTING</button>
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-white to-gray-50 border-r-8 border-black p-8 sidebar-hidden flex flex-col shadow-[20px_0_0_#000]">
+        <div class="neo-border-heavy p-6 mb-12 bg-gradient-to-r from-yellow-400 to-amber-400">
+            <h1 class="text-3xl font-black italic mb-2 uppercase tracking-widest text-black drop-shadow-[2px_2px_0px_#FFF]">Dika Menu</h1>
+            <div class="w-24 h-1 bg-black mx-auto rounded-none shadow-[2px_2px_0_#FFF]"></div>
+        </div>
+        <nav class="space-y-6 flex-grow">
+            <button class="sidebar-btn w-full p-6 neo-border-heavy bg-gradient-to-r from-cyan-400 to-blue-500 font-black text-left uppercase text-lg tracking-wider hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-600 transform hover:scale-[1.02] active:scale-[0.98]">
+                👤 PROFILE
+            </button>
+            <button onclick="handleNav('setting/setting.html')" class="sidebar-btn w-full p-6 neo-border-heavy bg-gradient-to-r from-pink-400 to-rose-500 font-black text-left uppercase text-lg tracking-wider hover:bg-gradient-to-r hover:from-pink-500 hover:to-rose-600 transform hover:scale-[1.02] active:scale-[0.98]">
+                ⚙️ SETTING
+            </button>
         </nav>
-        <div class="mt-auto p-3 bg-black text-white text-center font-black text-xs uppercase">DIKA DEV PROJECT</div>
+        <div class="mt-auto p-6 neo-border bg-gradient-to-r from-black to-gray-800 text-white text-center font-black text-sm uppercase tracking-widest pt-8 pb-8 relative">
+            <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gradient-to-r from-yellow-400 to-amber-400 border-4 border-black rounded-full flex items-center justify-center shadow-[4px_4px_0_#000] font-bold text-xl">⭐</div>
+            DIKA DEV PROJECT
+        </div>
     </aside>
 
-    <header>
-        <button onclick="toggleSidebar()" class="w-10 h-10 border-2 border-black flex items-center justify-center bg-white shadow-[2px_2px_0_0_#000]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <header class="neo-border-heavy">
+        <button onclick="toggleSidebar()" class="neo-press w-14 h-14 border-4 border-black flex items-center justify-center bg-gradient-to-r from-white to-gray-50 shadow-[4px_4px_0_0_#000] hover:shadow-[6px_6px_0_0_#000] active:shadow-[2px_2px_0_0_#000]">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
         </button>
-        <div class="font-black text-base italic uppercase tracking-tighter">DASHBOARD / DIKA DEV</div>
-        <div class="w-10"></div>
+        <div class="font-black text-xl italic uppercase tracking-widest bg-gradient-to-r from-black to-gray-800 bg-clip-text text-transparent drop-shadow-[2px_2px_0px_#FFF]">
+            DASHBOARD / DIKA DEV
+        </div>
+        <div class="w-14"></div>
     </header>
 
     <main id="main-content">
-        <div class="bg-[#FFDE00] border-4 border-black p-6 mb-6 shadow-[6px_6px_0_0_#000] console-banner neo-border relative" id="drama-box">
-            <h2 class="text-2xl font-black uppercase tracking-wider mb-4">CONSOLE LOG</h2>
+        <div class="neo-border-heavy p-8 mb-8 console-banner relative overflow-hidden" id="drama-box">
+            <h2 class="text-3xl font-black uppercase tracking-widest mb-6 bg-gradient-to-r from-black via-gray-800 to-black bg-clip-text text-transparent drop-shadow-[3px_3px_0px_#FFF]">CONSOLE LOG</h2>
             <div class="console-floor"></div>
             <div class="console-text" id="console-log">sistem siap digunakan oleh user...</div>
 
-            <!-- NEOBRUTALISM CHARACTERS -->
+            <!-- ENHANCED CHARACTERS -->
             <div id="char-dinda" class="mc-char dinda">
                 <div class="bubble" id="bubble-dinda"></div>
                 <div class="mc-head" id="head-dinda">
                     <div class="mc-hair"></div>
-                    <div class="eye-row"><div class="mc-eye"></div><div class="mc-eye"></div></div>
+                    <div class="eye-row">
+                        <div class="mc-eye"></div>
+                        <div class="mc-eye"></div>
+                    </div>
+                    <div class="mc-mouth"></div>
                 </div>
                 <div class="mc-body"></div>
-                <div class="mc-arm" style="left:-3px" id="arm-dinda-l"></div>
-                <div class="mc-arm" style="right:-3px" id="arm-dinda-r"></div>
-                <div class="mc-leg" style="left:2px" id="leg-dinda-l"></div>
-                <div class="mc-leg" style="right:2px" id="leg-dinda-r"></div>
+                <div class="mc-arm" style="left:-4px" id="arm-dinda-l"></div>
+                <div class="mc-arm" style="right:-4px" id="arm-dinda-r"></div>
+                <div class="mc-leg" style="left:3px" id="leg-dinda-l"></div>
+                <div class="mc-leg" style="right:3px" id="leg-dinda-r"></div>
             </div>
             <div id="char-dika" class="mc-char dika">
                 <div class="bubble" id="bubble-dika"></div>
                 <div id="head-dika" class="mc-head">
                     <div class="mc-hair"></div>
-                    <div class="eye-row"><div class="mc-eye"></div><div class="mc-eye"></div></div>
+                    <div class="eye-row">
+                        <div class="mc-eye"></div>
+                        <div class="mc-eye"></div>
+                    </div>
+                    <div class="mc-mouth"></div>
                 </div>
                 <div class="mc-body"></div>
-                <div class="mc-arm" style="left:-3px" id="arm-dika-l"></div>
-                <div class="mc-arm" style="right:-3px" id="arm-dika-r"></div>
-                <div class="mc-leg" style="left:2px" id="leg-dika-l"></div>
-                <div class="mc-leg" style="right:2px" id="leg-dika-r"></div>
+                <div class="mc-arm" style="left:-4px" id="arm-dika-l"></div>
+                <div class="mc-arm" style="right:-4px" id="arm-dika-r"></div>
+                <div class="mc-leg" style="left:3px" id="leg-dika-l"></div>
+                <div class="mc-leg" style="right:3px" id="leg-dika-r"></div>
             </div>
         </div>
 
-        <div class="main-card" onclick="handleNav('bot/rain.html')">
+        <div class="main-card neo-press" onclick="handleNav('bot/rain.html')">
             <div class="photo-frame">
                 <img src="https://i.ibb.co.com/zVykFCrG/wkcfhd.jpg" alt="Rain Bot">
-                <div class="online-badge">ONLINE</div>
+                <div class="online-badge">🔥 ONLINE</div>
             </div>
-            <div class="p-4 flex justify-between items-center bg-white">
+            <div class="p-6 flex justify-between items-center bg-gradient-to-r from-white to-gray-50">
                 <div>
-                    <h3 class="text-xl font-black italic">RAIN BOT V1</h3>
-                    <p class="text-[10px] font-bold text-gray-500 uppercase">SENTUH UNTUK MELANJUTKAN</p>
+                    <h3 class="text-2xl font-black italic uppercase tracking-wider mb-2">RAIN BOT V1</h3>
+                    <p class="text-sm font-bold text-gray-600 uppercase tracking-widest letter-spacing-2">Sentuh Untuk Melanjutkan</p>
                 </div>
-                <div class="btn-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <div class="btn-arrow neo-press">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="4">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
                 </div>
             </div>
         </div>
 
-        <div class="next-update-card uppercase">Next Update</div>
-        <div class="next-update-card uppercase">Next Update</div>
+        <div class="next-update-card uppercase">
+            <span>Next Update</span>
+        </div>
+        <div class="next-update-card uppercase">
+            <span>Coming Soon</span>
+        </div>
     </main>
 
-    <nav class="bottom-nav">
+    <nav class="bottom-nav neo-border-heavy">
         <div class="navbar-top-line"></div>
-        <a href="#" class="nav-item active" id="nav-chat">
-            <div class="nav-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-            <span>CHAT</span>
+        <a href="#" class="nav-item active neo-press" id="nav-chat">
+            <div class="nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="4">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            </div>
+            <span>Chat</span>
         </a>
         <div class="nav-divider"></div>
-        <a href="javascript:void(0)" onclick="handleNav('logic/fitur.html')" class="nav-item" id="nav-fitur">
-            <div class="nav-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-            <span>FITUR</span>
+        <a href="javascript:void(0)" onclick="handleNav('logic/fitur.html')" class="nav-item neo-press" id="nav-fitur">
+            <div class="nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="4">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            <span>Fitur</span>
         </a>
         <div class="nav-divider"></div>
-        <a href="javascript:void(0)" onclick="handleNav('setting/setting.html')" class="nav-item">
-            <div class="nav-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-            <span>SETTING</span>
+        <a href="javascript:void(0)" onclick="handleNav('setting/setting.html')" class="nav-item neo-press">
+            <div class="nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="4">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </div>
+            <span>Setting</span>
         </a>
     </nav>
 
     <script>
+        // === UTILITY FUNCTIONS ===
         function toggleSidebar() {
             const sb = document.getElementById('sidebar');
             const ov = document.getElementById('overlay');
             if (sb.classList.contains('sidebar-hidden')) {
                 sb.classList.replace('sidebar-hidden', 'sidebar-visible');
                 ov.style.display = 'block';
+                document.body.style.overflow = 'hidden';
             } else {
                 sb.classList.replace('sidebar-visible', 'sidebar-hidden');
                 ov.style.display = 'none';
+                document.body.style.overflow = 'hidden';
             }
         }
 
         function handleNav(url) {
             const main = document.getElementById('main-content');
-            main.style.transition = 'all 0.3s ease';
+            main.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             main.style.opacity = '0';
-            main.style.transform = 'translateY(-10px)';
-            setTimeout(() => { window.location.href = url; }, 300);
+            main.style.transform = 'translateY(-20px) scale(0.95)';
+            setTimeout(() => { window.location.href = url; }, 500);
         }
 
-        // --- FIXED NEOBRUTALISM DRAMA LOGIC ---
-        const dika = document.getElementById('char-dika');
-        const dinda = document.getElementById('char-dinda');
-        const bDika = document.getElementById('bubble-dika');
-        const bDinda = document.getElementById('bubble-dinda');
-        const hDika = document.getElementById('head-dika');
-        const hDinda = document.getElementById('head-dinda');
-        const box = document.getElementById('drama-box');
-        const consoleLog = document.getElementById('console-log');
+        // === ENHANCED DRAMA SYSTEM ===
+        const elements = {
+            dika: document.getElementById('char-dika'),
+            dinda: document.getElementById('char-dinda'),
+            bDika: document.getElementById('bubble-dika'),
+            bDinda: document.getElementById('bubble-dinda'),
+            hDika: document.getElementById('head-dika'),
+            hDinda: document.getElementById('head-dinda'),
+            box: document.getElementById('drama-box'),
+            consoleLog: document.getElementById('console-log')
+        };
 
-        // FIXED SPEECH BUBBLE - LEBIH LAMA & AUTO SIZE
-        function say(el, t, d=4500) { // LAMA TAMPIL LEBIH PANJANG
-            el.innerHTML = t.toLowerCase().replace(/ /g, '&nbsp;');
-            el.style.display = 'block';
-            el.style.opacity = '0';
-            el.style.transform = 'translateX(-50%) translateY(15px)';
-            el.style.left = '50%';
-            el.style.transition = 'none';
+        // ENHANCED SPEECH WITH BETTER ANIMATION
+        function say(bubble, text, duration = 5000) {
+            bubble.innerHTML = text.toLowerCase().replace(/ /g, '&nbsp;');
+            bubble.style.display = 'block';
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'translateX(-50%) translateY(20px) scale(0.9)';
             
-            el.offsetHeight;
+            // Force reflow
+            bubble.offsetHeight;
             
-            el.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            bubble.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             setTimeout(() => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateX(-50%) translateY(0)';
-            }, 50);
+                bubble.style.opacity = '1';
+                bubble.style.transform = 'translateX(-50%) translateY(0) scale(1)';
+            }, 100);
             
             setTimeout(() => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateX(-50%) translateY(-15px)';
-                setTimeout(() => el.style.display = 'none', 500);
-            }, d);
+                bubble.style.opacity = '0';
+                bubble.style.transform = 'translateX(-50%) translateY(-20px) scale(1.05)';
+                setTimeout(() => bubble.style.display = 'none', 600);
+            }, duration);
         }
 
+        // CHARACTER MOVEMENT HELPERS
         function setWalk(char, status) {
             const legs = char.querySelectorAll('.mc-leg');
-            if(status) { 
-                legs[0].classList.add('walking-l'); 
-                legs[1].classList.add('walking-r'); 
-            } else { 
-                legs[0].classList.remove('walking-l', 'walking-r'); 
-                legs[1].classList.remove('walking-l', 'walking-r'); 
+            if (status) {
+                legs[0].classList.add('walking-l');
+                legs[1].classList.add('walking-r');
+            } else {
+                legs[0].classList.remove('walking-l', 'walking-r');
+                legs[1].classList.remove('walking-l', 'walking-r');
             }
         }
 
         function resetArms(char) {
             const arms = char.querySelectorAll('.mc-arm');
-            arms.forEach(arm => arm.style.transform = 'rotate(0deg)');
+            arms.forEach(arm => {
+                arm.style.transform = 'rotate(0deg) translateY(0px)';
+            });
         }
 
         function standUp(char) {
@@ -396,14 +762,14 @@
                 leg.style.transform = 'rotate(0deg)';
                 leg.classList.remove('sit-swing-l', 'sit-swing-r');
             });
-            char.style.transform = 'translateY(0px) rotate(0deg)';
+            char.style.transform = 'translateY(0px) rotate(0deg) scale(1)';
         }
 
         function sitDown(char, headRotate = '0deg') {
-            char.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            char.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             const legs = char.querySelectorAll('.mc-leg');
-            legs[0].style.transform = 'rotate(32deg)';
-            legs[1].style.transform = 'rotate(58deg)';
+            legs[0].style.transform = 'rotate(35deg)';
+            legs[1].style.transform = 'rotate(60deg)';
             legs[0].classList.add('sit-swing-l');
             legs[1].classList.add('sit-swing-r');
             
@@ -411,14 +777,16 @@
             head.style.transform = headRotate;
             
             setTimeout(() => {
-                char.style.transform = 'translateY(26px) rotate(0deg)';
-            }, 50);
+                char.style.transform = 'translateY(32px) rotate(0deg) scale(0.95)';
+            }, 100);
         }
 
+        // MAIN DRAMA SEQUENCE - ULTRA SMOOTH
         async function startDrama() {
             try {
-                const boxRect = box.getBoundingClientRect();
-                const consoleFloorRect = box.querySelector('.console-floor').getBoundingClientRect();
+                // Get precise positions
+                const boxRect = elements.box.getBoundingClientRect();
+                const consoleFloorRect = elements.box.querySelector('.console-floor').getBoundingClientRect();
                 const navbarLineRect = document.querySelector('.navbar-top-line').getBoundingClientRect();
                 const navChatRect = document.getElementById('nav-chat').getBoundingClientRect();
                 const navFiturRect = document.getElementById('nav-fitur').getBoundingClientRect();
@@ -427,173 +795,227 @@
                 const navbarY = navbarLineRect.top + window.scrollY;
                 const boxRight = boxRect.right + window.scrollX;
                 
-                dika.style.transition = dinda.style.transition = "all 0.3s ease-out";
-                dika.style.opacity = dinda.style.opacity = "1";
-                dika.style.zIndex = dinda.style.zIndex = "100";
+                // Initialize characters
+                Object.values(elements).forEach(el => {
+                    if (el.classList && el.classList.contains('mc-char')) {
+                        el.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                        el.style.opacity = '1';
+                        el.style.zIndex = '100';
+                    }
+                });
+
+                // Position characters
+                elements.dika.style.left = "30px";
+                elements.dika.style.top = (floorY - 92) + "px";
+                elements.dika.style.transform = "translateY(0px) rotate(0deg) scale(1)";
                 
-                dika.style.left = "25px"; 
-                dika.style.top = (floorY - 80) + "px";
-                dika.style.transform = "translateY(0px) rotate(0deg)";
+                elements.dinda.style.left = (boxRect.width - 75) + "px";
+                elements.dinda.style.top = (floorY - 92) + "px";
+                elements.dinda.style.transform = "translateY(0px) rotate(0deg) scale(1)";
+
+                // Reset everything
+                [elements.hDika, elements.hDinda].forEach(h => h.style.transform = "rotateY(0deg)");
+                resetArms(elements.dika);
+                resetArms(elements.dinda);
+                standUp(elements.dika);
+                standUp(elements.dinda);
                 
-                dinda.style.left = (boxRect.width - 60) + "px"; 
-                dinda.style.top = (floorY - 80) + "px";
-                dinda.style.transform = "translateY(0px) rotate(0deg)";
-                
-                hDika.style.transform = hDinda.style.transform = "rotateY(0deg)";
-                resetArms(dika); resetArms(dinda); 
-                standUp(dika); standUp(dinda);
-                
-                dika.classList.remove('sad-bounce'); 
-                dinda.classList.remove('sad-bounce');
-                hDika.classList.remove('head-shake'); 
-                hDinda.classList.remove('head-shake');
-                
-                consoleLog.textContent = "sistem siap digunakan oleh user...";
-                await new Promise(r => setTimeout(r, 2000)); // PAUSE LEBIH LAMA
+                [elements.dika, elements.dinda].forEach(char => {
+                    char.classList.remove('sad-bounce', 'heart-beat');
+                });
+                [elements.hDika, elements.hDinda].forEach(h => h.classList.remove('head-shake'));
 
-                // === DRAMA SEQUENCE - TIMING DIPELAJARI ===
-                say(bDika, "dinda pagi~", 5000);
-                document.getElementById('arm-dika-r').style.transform = "rotate(25deg)";
-                await new Promise(r => setTimeout(r, 5500));
-                
-                say(bDinda, "pagi juga...", 5000);
-                document.getElementById('arm-dinda-r').style.transform = "rotate(-25deg)";
-                await new Promise(r => setTimeout(r, 5500));
-                resetArms(dika); resetArms(dinda);
+                elements.consoleLog.textContent = "sistem siap digunakan oleh user...";
+                await sleep(2500);
 
-                say(bDinda, "eh dika kemarin katanya mau chat", 5500);
-                await new Promise(r => setTimeout(r, 6000));
-                
-                say(bDika, "eh iya sorry main game bentar...", 5000);
-                hDika.classList.add('head-shake');
-                await new Promise(r => setTimeout(r, 5500));
-                hDika.classList.remove('head-shake');
+                // === ENHANCED DRAMA SEQUENCE ===
+                await playSequence([
+                    // Greeting
+                    { who: 'dika', text: "dinda pagi~", arm: 'r', angle: '30deg', duration: 5500 },
+                    { who: 'dinda', text: "pagi juga...", arm: 'r', angle: '-30deg', duration: 5500 },
+                    
+                    // Conflict starts
+                    { who: 'dinda', text: "eh dika kemarin katanya mau chat", duration: 6000 },
+                    { who: 'dika', text: "eh iya sorry main game bentar...", headShake: true, duration: 5500 },
+                    
+                    // Dinda angry
+                    { who: 'dinda', text: "MAIN GAME?! bohong!", headFlip: true, arm: 'r', angle: '60deg', duration: 5000 },
+                    
+                    // Dika approaches
+                    { action: () => walkTo(elements.dika, boxRect.width - 130, 5000, true) },
+                    { who: 'dika', text: "dinda jangan marah dong...", duration: 5500 },
+                    { who: 'dika', text: "aku janji ga gitu lagi...", duration: 5500 },
+                    
+                    // Dinda rejects
+                    { who: 'dinda', text: "udah! pergi sana!", arm: 'l', angle: '-140deg', duration: 4500 },
+                    { action: () => pushBack(elements.dika, boxRect.width - 180) },
+                    
+                    // Dika sad walk to chat
+                    { who: 'dika', text: "ya udah... aku pergi deh...", sad: true, duration: 6000 },
+                    { action: () => walkTo(elements.dika, 25, 6000, true, true) },
+                    
+                    // Dika sits on chat
+                    { action: () => sitOnNav(elements.dika, navChatRect, navbarY, 'rotateY(0deg)') },
+                    { who: 'dika', text: "ingin rasanya", sad: true, duration: 5000 },
+                    { who: 'dika', text: "aku menangis", sad: true, duration: 5000 },
+                    { who: 'dika', text: "merindukan kamu", sad: true, duration: 5000 },
+                    
+                    // Dinda feels sorry
+                    { console: "dinda mulai kasihan...", who: 'dinda', text: "kasian sih dika...", headShake: true, duration: 6000 },
+                    
+                    // Dinda walks to fitur
+                    { action: () => walkTo(elements.dinda, 45, 7000, true, true) },
+                    { action: () => sitOnNav(elements.dinda, navFiturRect, navbarY, 'rotateY(180deg)') },
+                    
+                    // Reconciliation
+                    { console: "mereka mulai berdamai...", who: 'dinda', text: "ya udah deh dika...", duration: 5500 },
+                    { who: 'dika', text: "kamu ga marah lagi?", arm: 'r', angle: '35deg', duration: 5500 },
+                    { who: 'dinda', text: "ga lah... ayo sini", arm: 'l', angle: '-35deg', duration: 5500 },
+                    
+                    // Walk together
+                    { console: "ayo pulang bareng...", action: () => walkTogether(navChatRect, navFiturRect) },
+                    
+                    // Final exit
+                    { action: () => exitTogether(boxRect.width) }
+                ]);
 
-                say(bDinda, "MAIN GAME?! bohong!", 4500);
-                hDinda.style.transform = "rotateY(180deg)";
-                document.getElementById('arm-dinda-r').style.transform = "rotate(50deg)";
-                await new Promise(r => setTimeout(r, 5000));
-                resetArms(dinda);
-
-                say(bDika, "dinda jangan marah dong...", 5500);
-                dika.style.transition = "left 5s linear, transform 0.5s";
-                setWalk(dika, true);
-                dika.style.left = (boxRect.width - 115) + "px";
-                await new Promise(r => setTimeout(r, 5000));
-                setWalk(dika, false);
-
-                say(bDika, "aku janji ga gitu lagi...", 5000);
-                await new Promise(r => setTimeout(r, 5500));
-
-                say(bDinda, "udah! pergi sana!", 4500);
-                document.getElementById('arm-dinda-l').style.transform = "rotate(-130deg)";
-                dika.style.transition = "all 1s ease-out";
-                dika.style.left = (boxRect.width - 165) + "px";
-                dika.style.transform = "rotate(-20deg)";
-                await new Promise(r => setTimeout(r, 1500));
-                resetArms(dinda); 
-                dika.style.transform = "rotate(0deg) translateY(0px)";
-
-                dika.classList.add('sad-bounce');
-                say(bDika, "ya udah... aku pergi deh...", 5500);
-                await new Promise(r => setTimeout(r, 6000));
-                dika.classList.remove('sad-bounce');
-                
-                dika.style.transition = "left 6s linear";
-                setWalk(dika, true); 
-                hDika.style.transform = "rotateY(180deg)";
-                dika.style.left = "20px";
-                await new Promise(r => setTimeout(r, 6000));
-                setWalk(dika, false);
-
-                consoleLog.textContent = "dika pindah ke chat...";
-                dika.style.transition = "all 3.5s cubic-bezier(0.25, 0.1, 0.25, 1)";
-                const chatCenter = navChatRect.left + (navChatRect.width / 2) - 18 + window.scrollX;
-                dika.style.left = chatCenter + "px";
-                dika.style.top = (navbarY - 80) + "px";
-                await new Promise(r => setTimeout(r, 3500));
-
-                sitDown(dika, 'rotateY(0deg)');
-
-                const laguSedih = ["ingin rasanya", "aku menangis", "merindukan kamu"];
-                dika.classList.add('sad-bounce');
-                for(let lirik of laguSedih) { 
-                    say(bDika, lirik, 4500); 
-                    await new Promise(r => setTimeout(r, 5000)); 
-                }
-                dika.classList.remove('sad-bounce');
-
-                consoleLog.textContent = "dinda mulai kasihan...";
-                say(bDinda, "kasian sih dika...", 5500);
-                hDinda.classList.add('head-shake');
-                await new Promise(r => setTimeout(r, 6000));
-                hDinda.classList.remove('head-shake');
-
-                dinda.style.transition = "left 7s linear";
-                setWalk(dinda, true); 
-                hDinda.style.transform = "rotateY(180deg)";
-                dinda.style.left = "35px";
-                await new Promise(r => setTimeout(r, 7000));
-                setWalk(dinda, false);
-
-                dinda.style.transition = "all 3.5s cubic-bezier(0.25, 0.1, 0.25, 1)";
-                const fiturCenter = navFiturRect.left + (navFiturRect.width / 2) - 18 + window.scrollX;
-                dinda.style.left = fiturCenter + "px";
-                dinda.style.top = (navbarY - 80) + "px";
-                await new Promise(r => setTimeout(r, 3500));
-
-                sitDown(dinda, 'rotateY(180deg)');
-
-                consoleLog.textContent = "mereka mulai berdamai...";
-                say(bDinda, "ya udah deh dika...", 5000);
-                await new Promise(r => setTimeout(r, 5500));
-                
-                say(bDika, "kamu ga marah lagi?", 5000);
-                document.getElementById('arm-dika-r').style.transform = "rotate(30deg)";
-                await new Promise(r => setTimeout(r, 5500));
-                resetArms(dika);
-
-                say(bDinda, "ga lah... ayo sini", 5000);
-                document.getElementById('arm-dinda-l').style.transform = "rotate(-30deg)";
-                await new Promise(r => setTimeout(r, 5500));
-                resetArms(dinda);
-
-                consoleLog.textContent = "ayo pulang bareng...";
-                standUp(dika);
-                standUp(dinda);
-                await new Promise(r => setTimeout(r, 1000));
-
-                dika.style.transition = dinda.style.transition = "left 2s ease-in-out";
-                const meetX = (chatCenter + fiturCenter) / 2 - 18;
-                dika.style.left = meetX + "px";
-                dinda.style.left = (meetX + 35) + "px";
-                say(bDinda, "ayo pulang yuk...", 5500);
-                document.getElementById('arm-dika-r').style.transform = "rotate(-25deg)";
-                document.getElementById('arm-dinda-l').style.transform = "rotate(25deg)";
-                await new Promise(r => setTimeout(r, 5500));
-
-                dika.style.transition = dinda.style.transition = "left 7s linear";
-                setWalk(dika, true); 
-                setWalk(dinda, true);
-                hDika.style.transform = hDinda.style.transform = "rotateY(0deg)";
-                dika.style.left = "125%"; 
-                dinda.style.left = "135%";
-                
-                await new Promise(r => setTimeout(r, 7500));
-                consoleLog.textContent = "loop dimulai lagi...";
-                
-                await new Promise(r => setTimeout(r, 1500));
+                elements.consoleLog.textContent = "loop dimulai lagi...";
+                await sleep(3000);
                 startDrama();
                 
             } catch(error) {
                 console.error('Drama error:', error);
-                setTimeout(startDrama, 2000);
+                setTimeout(startDrama, 3000);
             }
         }
 
+        // === HELPER FUNCTIONS ===
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function playSequence(sequence) {
+            for (let step of sequence) {
+                if (step.action) {
+                    await step.action();
+                } else if (step.console) {
+                    elements.consoleLog.textContent = step.console;
+                    if (step.who) await playDialogue(step);
+                } else if (step.who) {
+                    await playDialogue(step);
+                }
+                await sleep(step.duration || 1000);
+            }
+        }
+
+        async function playDialogue(step) {
+            const char = elements[`char-${step.who}`];
+            const bubble = elements[`b${step.who.charAt(0).toUpperCase() + step.who.slice(1)}`];
+            const arm = elements[`arm-${step.who}-${step.arm || 'r'}`];
+            const head = elements[`h${step.who.charAt(0).toUpperCase() + step.who.slice(1)}`];
+            
+            say(bubble, step.text);
+            
+            if (step.arm && arm) {
+                arm.style.transform = `rotate(${step.angle}) translateY(-2px)`;
+            }
+            
+            if (step.headShake && head) {
+                head.classList.add('head-shake');
+                setTimeout(() => head.classList.remove('head-shake'), 1000);
+            }
+            
+            if (step.headFlip && head) {
+                head.style.transform = 'rotateY(180deg)';
+            }
+            
+            if (step.sad) {
+                char.classList.add('sad-bounce');
+                setTimeout(() => char.classList.remove('sad-bounce'), 5000);
+            }
+        }
+
+        async function walkTo(char, xPos, duration, walking = false, flipHead = false) {
+            if (flipHead) char.querySelector('.mc-head').style.transform = 'rotateY(180deg)';
+            if (walking) setWalk(char, true);
+            char.style.transition = `left ${duration}ms linear, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            char.style.left = xPos + 'px';
+            await sleep(duration);
+            if (walking) setWalk(char, false);
+        }
+
+        function pushBack(char, xPos) {
+            char.style.transition = 'all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1)';
+            char.style.left = xPos + 'px';
+            char.style.transform = 'rotate(-25deg) translateY(0px)';
+            setTimeout(() => {
+                char.style.transform = 'rotate(0deg) translateY(0px)';
+            }, 1200);
+        }
+
+        async function sitOnNav(char, navRect, navbarY, headRotate) {
+            char.style.transition = 'all 4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+            const centerX = navRect.left + (navRect.width / 2) - 21 + window.scrollX;
+            char.style.left = centerX + 'px';
+            char.style.top = (navbarY - 92) + 'px';
+            await sleep(4000);
+            sitDown(char, headRotate);
+        }
+
+        async function walkTogether(chatRect, fiturRect) {
+            standUp(elements.dika);
+            standUp(elements.dinda);
+            await sleep(1200);
+            
+            const meetX = (chatRect.left + fiturRect.left) / 2 - 21;
+            elements.dika.style.transition = 'left 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            elements.dinda.style.transition = 'left 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            
+            elements.dika.style.left = meetX + 'px';
+            elements.dinda.style.left = (meetX + 42) + 'px';
+            
+            say(elements.bDinda, "ayo pulang yuk...");
+            elements['arm-dika-r'].style.transform = 'rotate(-30deg)';
+            elements['arm-dinda-l'].style.transform = 'rotate(30deg)';
+            
+            await sleep(5500);
+            resetArms(elements.dika);
+            resetArms(elements.dinda);
+        }
+
+        async function exitTogether(boxWidth) {
+            elements.dika.style.transition = 'left 8s linear';
+            elements.dinda.style.transition = 'left 8s linear';
+            setWalk(elements.dika, true);
+            setWalk(elements.dinda, true);
+            elements.hDika.style.transform = elements.hDinda.style.transform = 'rotateY(0deg)';
+            
+            elements.dika.style.left = (boxWidth + 100) + 'px';
+            elements.dinda.style.left = (boxWidth + 150) + 'px';
+            
+            await sleep(8000);
+        }
+
+        // START ON LOAD
         window.addEventListener('load', () => {
-            setTimeout(startDrama, 500);
+            setTimeout(startDrama, 800);
         });
+
+        // Prevent zoom on iOS
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
