@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dika Dev Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #E2E2E2;
+            --accent-color: #FFDE00;
+            --border-color: #000000;
+        }
+
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+            height: 100vh;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .neo-border {
+            border: 3px solid #000;
+            box-shadow: 5px 5px 0px 0px #000;
+        }
+
+        /* Sidebar Drawer */
+        #sidebar {
+            transition: transform 0.4s cubic-bezier(0.7, 0, 0.2, 1);
+            z-index: 100;
+        }
+        .sidebar-hidden { transform: translateX(-110%); }
+        .sidebar-visible { transform: translateX(0); }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 90;
+            backdrop-filter: blur(4px);
+        }
+
+        header {
+            height: 60px;
+            background: white;
+            border-bottom: 3px solid black;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            padding-bottom: 100px;
+        }
+
+        /* Bottom Navbar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 75px;
+            background: white;
+            border-top: 4px solid black;
+            display: flex;
+            align-items: center;
+            z-index: 50;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            flex: 1;
+            height: 100%;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            background: var(--accent-color);
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-divider {
+            width: 3px;
+            height: 35px;
+            background: black;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: white;
+            border: 3px solid black;
+            box-shadow: 6px 6px 0px black;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* PHOTO POSITION FIX */
+        .photo-frame {
+            width: 100%;
+            height: 200px; 
+            border-bottom: 3px solid black;
+            overflow: hidden;
+            position: relative;
+            background-color: #000;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Kembali ke cover agar penuh */
+            object-position: 50% 20%; /* Menyesuaikan agar wajah karakter pas di tengah kotak */
+            display: block;
+        }
+
+        .online-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #00FF00;
+            border: 2px solid black;
+            padding: 2px 8px;
+            font-weight: 900;
+            font-size: 0.6rem;
+            box-shadow: 2px 2px 0px black;
+        }
+
+        .next-update-card {
+            border: 3px dashed #888;
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: 900;
+            font-style: italic;
+            color: #888;
+            background: rgba(255,255,255,0.5);
+            box-shadow: 4px 4px 0px black;
+            margin-bottom: 1rem;
+        }
+
+        .btn-arrow {
+            width: 35px;
+            height: 35px;
+            background: var(--accent-color);
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 0px black;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" onclick="toggleSidebar()"></div>
+
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white border-r-4 border-black p-6 sidebar-hidden flex flex-col">
+        <h1 class="text-2xl font-black italic mb-8 underline uppercase">Dika Menu</h1>
+        <nav class="space-y-4">
+            <button class="w-full p-3 neo-border bg-[#00E6FF] font-black text-left uppercase">PROFILE</button>
+            <button onclick="handleNav('setting/setting.html')" class="w-full p-3 neo-border bg-[#FF71CD] font-black text-left uppercase">SETTING</button>
+        </nav>
+        <div class="mt-auto p-3 bg-black text-white text-center font-black text-xs uppercase">DIKA DEV PROJECT</div>
+    </aside>
+
+    <header>
+        <button onclick="toggleSidebar()" class="w-10 h-10 border-2 border-black flex items-center justify-center bg-white shadow-[2px_2px_0_0_#000]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="font-black text-base italic uppercase tracking-tighter">DASHBOARD / DIKA DEV</div>
+        <div class="w-10"></div>
+    </header>
+
+    <main id="main-content">
+        <div class="bg-[#FFDE00] border-4 border-black p-4 mb-6 shadow-[5px_5px_0_0_#000]">
+            <h2 class="text-xl font-black italic uppercase leading-tight">CONSOLE LOG</h2>
+            <p class="text-[10px] font-bold">Sistem siap digunakan oleh user.</p>
+        </div>
+
+        <div class="main-card" onclick="handleNav('bot/rain.html')">
+            <div class="photo-frame">
+                <img src="https://i.ibb.co.com/zVykFCrG/wkcfhd.jpg" alt="Rain Bot">
+                <div class="online-badge">ONLINE</div>
+            </div>
+            <div class="p-4 flex justify-between items-center bg-white">
+                <div>
+                    <h3 class="text-xl font-black italic">RAIN BOT V1</h3>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase">SENTUH UNTUK MELANJUTKAN</p>
+                </div>
+                <div class="btn-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="next-update-card uppercase">Next Update</div>
+        <div class="next-update-card uppercase">Next Update</div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
+            <div class="nav-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span>CHAT</span>
+        </a>
+        <div class="nav-divider"></div>
+        <a href="javascript:void(0)" onclick="handleNav('logic/fitur.html')" class="nav-item">
+            <div class="nav-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span>FITUR</span>
+        </a>
+        <div class="nav-divider"></div>
+        <a href="javascript:void(0)" onclick="handleNav('setting/setting.html')" class="nav-item">
+            <div class="nav-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <span>SETTING</span>
+        </a>
+    </nav>
+
+    <script>
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('overlay');
+            if (sb.classList.contains('sidebar-hidden')) {
+                sb.classList.replace('sidebar-hidden', 'sidebar-visible');
+                ov.style.display = 'block';
+            } else {
+                sb.classList.replace('sidebar-visible', 'sidebar-hidden');
+                ov.style.display = 'none';
+            }
+        }
+
+        function handleNav(url) {
+            const main = document.getElementById('main-content');
+            main.style.transition = 'all 0.3s ease';
+            main.style.opacity = '0';
+            main.style.transform = 'translateY(-10px)';
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+    </script>
+</body>
+</html>
