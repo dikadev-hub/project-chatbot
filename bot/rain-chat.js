@@ -3,8 +3,8 @@ async function balas(pesanInput) {
     const command = budy.split(' ')[0];
 
     const m = {
-        reply: (teks, image = null, button = null) => {
-            return { teks, image, button };
+        reply: (teks, image = null, button = null, link = null, color = 'white') => {
+            return { teks, image, button, link, color };
         }
     };
 
@@ -28,7 +28,8 @@ async function balas(pesanInput) {
             break;
 
         case '#owner':
-            return await m.reply("Owner saya adalah *Dika Dev*.");
+            const teksOwner = `*KONTAK OWNER*\n\nNama: DIKA DEV 🚀\nStatus: Active\n\n_Silahkan hubungi melalui tombol di bawah ini._`;
+            return await m.reply(teksOwner.trim(), null, "CHAT WHATSAPP", "https://wa.me/6283121495921", "#25D366");
             break;
 
         case '#runtime':
