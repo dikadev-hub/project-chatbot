@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rain Bot V1 - Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #E2E2E2;
+            --accent-color: #FFDE00;
+            --user-msg: #00E6FF;
+            --bot-msg: #FFFFFF;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            height: 65px;
+            background: white;
+            border-bottom: 4px solid black;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            gap: 15px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border: 3px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 3px 3px 0px black;
+        }
+        #chat-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: #f0f0f0;
+            background-image: radial-gradient(#000 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border: 3px solid black;
+            font-weight: 700;
+            font-size: 0.9rem;
+            position: relative;
+            word-wrap: break-word;
+        }
+        .user-message {
+            align-self: flex-end;
+            background: var(--user-msg);
+            box-shadow: 4px 4px 0px black;
+            border-radius: 12px 12px 0 12px;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background: var(--bot-msg);
+            box-shadow: -4px 4px 0px black;
+            border-radius: 12px 12px 12px 0;
+        }
+        .thumb-msg {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border: 2px solid black;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px;
+        }
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: black;
+            border-radius: 50%;
+            animation: bounce 0.4s infinite alternate;
+        }
+        @keyframes bounce { to { transform: translateY(-4px); } }
+        .input-area {
+            background: white;
+            border-top: 4px solid black;
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+        }
+        #user-input {
+            flex-grow: 1;
+            border: 3px solid black;
+            padding: 10px;
+            font-weight: 700;
+            outline: none;
+            box-shadow: 3px 3px 0px black;
+        }
+        .send-btn {
+            background: var(--accent-color);
+            border: 3px solid black;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px 0px black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button onclick="location.href='../dashboard.html'" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="font-black text-md italic uppercase tracking-tighter">[ RAIN BOT V1 ]</div>
+    </header>
+
+    <div id="chat-container">
+        <div class="message bot-message">Halo! Ada yang bisa Rain bantu?</div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Ketik perintah..." autocomplete="off">
+        <button id="send-btn" class="send-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+    </div>
+
+    <script src="rain-chat.js"></script>
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        function createMessage(content, isUser) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            if (!isUser && typeof content === 'object') {
+                if (content.image) {
+                    const img = document.createElement('img');
+                    img.src = content.image;
+                    img.className = 'thumb-msg';
+                    msgDiv.appendChild(img);
+                }
+                const textPara = document.createElement('div');
+                textPara.innerText = content.teks;
+                msgDiv.appendChild(textPara);
+            } else {
+                msgDiv.innerText = content;
+            }
+
+            chatContainer.appendChild(msgDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'message bot-message typing-indicator';
+            typingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return typingDiv;
+        }
+
+        async function handleSend() {
+            const val = userInput.value.trim();
+            if (!val) return;
+            createMessage(val, true);
+            userInput.value = '';
+            const t = showTyping();
+            setTimeout(async () => {
+                t.remove();
+                const res = await balas(val);
+                createMessage(res, false);
+            }, 1000);
+        }
+
+        sendBtn.onclick = handleSend;
+        userInput.onkeypress = (e) => { if(e.key === 'Enter') handleSend(); };
+    </script>
+</body>
+</html>
+
