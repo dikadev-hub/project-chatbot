@@ -1,15 +1,10 @@
 async function balas(pesanInput) {
     const budy = pesanInput.toLowerCase();
     const command = budy.split(' ')[0];
-    const args = budy.split(' ').slice(1);
-    const text = args.join(' ');
 
     const m = {
-        body: budy,
-        command: command,
-        args: args,
-        reply: (teks, image = null) => {
-            return { teks, image };
+        reply: (teks, image = null, button = null) => {
+            return { teks, image, button };
         }
     };
 
@@ -22,9 +17,14 @@ async function balas(pesanInput) {
             break;
 
         case '#menu':
-        case '#help':
-            const menuTeks = `*RAIN BOT V1 - MENU*\n\n- #owner\n- #runtime\n- #waktu\n- #quotes\n\n_Silahkan pilih menu di atas._`;
-            return await m.reply(menuTeks.trim(), "https://i.ibb.co.com/zVykFCrG/wkcfhd.jpg");
+            const teksMenu = `*RAIN BOT V1 - MENU*\n\n- #owner\n- #runtime\n- #waktu\n- #quotes\n\n_Silahkan klik tombol di bawah untuk melihat daftar lengkap._`;
+            return await m.reply(teksMenu.trim(), "https://i.ibb.co.com/zVykFCrG/wkcfhd.jpg", "[ ALL MENU ]");
+            break;
+
+        case '[ all menu ]':
+        case '#allmenu':
+            const teksAllMenu = `*DAFTAR SEMUA MENU*\n\n1. #owner\n2. #runtime\n3. #waktu\n4. #quotes\n5. #donasi\n6. #info\n7. #ping\n\n_Klik salah satu perintah untuk menjalankan._`;
+            return await m.reply(teksAllMenu.trim());
             break;
 
         case '#owner':
@@ -41,18 +41,15 @@ async function balas(pesanInput) {
             break;
 
         case '#quotes':
-            const listQuotes = [
-                "Koding adalah seni.",
-                "Jangan menyerah pada bug.",
-                "Teruslah berkarya."
-            ];
-            const random = listQuotes[Math.floor(Math.random() * listQuotes.length)];
-            return await m.reply(`_“${random}”_`);
+            const q = ["Teruslah belajar.", "Koding itu seni.", "Bug adalah teman."];
+            return await m.reply(`_“${q[Math.floor(Math.random() * q.length)]}”_`);
+            break;
+
+        case '#donasi':
+            return await m.reply("Dukung Rain via Dana/Gopay: *08xxxxxx*");
             break;
 
         default:
-            if (budy.includes("pagi")) return await m.reply("Selamat pagi!");
-            if (budy.includes("malam")) return await m.reply("Selamat malam!");
             return await m.reply("Ketik *#menu* untuk bantuan.");
             break;
     }
