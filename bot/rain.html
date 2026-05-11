@@ -10,6 +10,7 @@
         :root {
             --bg: #E2E2E2;
             --blue: #00E6FF;
+            --yellow: #FFDE00;
             --border: #000000;
         }
 
@@ -20,16 +21,20 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            font-family: 'Public Sans', sans-serif;
-            background-color: var(--bg);
-            height: 100vh;
-            height: -webkit-fill-available;
-            display: flex;
-            flex-direction: column;
+        /* Full height tanpa scroll pada body */
+        html, body {
+            height: 100%;
             overflow: hidden;
+            background-color: var(--bg);
+            font-family: 'Public Sans', sans-serif;
         }
 
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Tetap di Atas */
         header {
             height: 56px;
             background: white;
@@ -38,8 +43,8 @@
             align-items: center;
             padding: 0 16px;
             gap: 12px;
+            flex-shrink: 0; /* Mencegah header mengecil */
             z-index: 100;
-            flex-shrink: 0;
         }
 
         .btn-back {
@@ -53,17 +58,17 @@
             box-shadow: 2.5px 2.5px 0px var(--border);
         }
 
+        /* Container Chat: Hanya ini yang boleh scroll */
         #chat-container {
-            flex: 1;
-            overflow-y: auto;
+            flex: 1; /* Mengambil sisa ruang layar */
+            overflow-y: auto; /* Aktifkan scroll vertikal */
             padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 20px;
             background-image: radial-gradient(var(--border) 0.7px, transparent 0.7px);
             background-size: 14px 14px;
-            scroll-behavior: smooth;
-            padding-bottom: 30px;
+            -webkit-overflow-scrolling: touch; /* Scroll halus di iOS */
         }
 
         .msg-wrapper {
@@ -112,10 +117,10 @@
             display: block;
         }
 
-        /* FLOATING BUTTON: WARNA SAMA, LEBAR SAMA, ADA SPASI */
+        /* FLOATING BUTTON: Lebar sama, Warna sama, Terpisah Spasi */
         .msg-btn {
             margin-top: 10px;
-            background: white; /* Warna sama dengan bubble bot */
+            background: white;
             border: 3px solid var(--border);
             padding: 10px;
             text-align: center;
@@ -123,8 +128,8 @@
             text-transform: uppercase;
             font-size: 12px;
             cursor: pointer;
-            box-shadow: -4px 4px 0px var(--border); /* Shadow sama arahnya dengan bubble bot */
-            width: 100%; /* Lebar sama dengan bubble chat bot */
+            box-shadow: -4px 4px 0px var(--border);
+            width: 100%;
             transition: 0.1s;
         }
 
@@ -133,13 +138,14 @@
             box-shadow: -2px 2px 0px var(--border);
         }
 
+        /* Input Bar Tetap di Bawah */
         .input-wrapper {
             background: white;
             border-top: 4px solid var(--border);
             padding: 12px 16px;
             display: flex;
             gap: 10px;
-            flex-shrink: 0;
+            flex-shrink: 0; /* Mencegah input bar tertekan chat */
             z-index: 100;
             padding-bottom: max(12px, env(safe-area-inset-bottom));
         }
@@ -159,7 +165,7 @@
         .btn-send {
             width: 48px;
             height: 48px;
-            background: #FFDE00;
+            background: var(--yellow);
             border: 3px solid var(--border);
             display: flex;
             align-items: center;
@@ -200,6 +206,7 @@
     </header>
 
     <div id="chat-container">
+        <!-- Chat akan muncul di sini -->
         <div class="msg-wrapper bot">
             <div class="msg">Halo! Ada yang bisa Rain bantu? Ketik *#menu* untuk memulai.</div>
         </div>
@@ -242,9 +249,7 @@
                     const b = document.createElement('div');
                     b.className = 'msg-btn';
                     b.innerText = content.button;
-                    b.onclick = () => {
-                        kirim(content.button);
-                    };
+                    b.onclick = () => kirim(content.button);
                     wrapper.appendChild(b);
                 }
             } else {
@@ -253,7 +258,11 @@
             }
 
             container.appendChild(wrapper);
-            container.scrollTop = container.scrollHeight;
+            
+            // Auto scroll ke bawah setiap pesan baru muncul
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 100);
         }
 
         function showTyping() {
@@ -287,8 +296,8 @@
 
         btn.onclick = () => kirim();
         input.onkeydown = (e) => { if(e.key === 'Enter') kirim(); };
-        
-        // Fix for mobile browser height
+
+        // Mencegah scroll mental saat keyboard muncul di HP
         window.addEventListener('resize', () => {
             container.scrollTop = container.scrollHeight;
         });
