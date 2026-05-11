@@ -4,51 +4,41 @@ export default async function handler(req, res) {
     const REPO_NAME = "project-chatbot";
     const FILE_PATH = "users.json";
 
-    // Cek apakah token tersedia
     if (!GITHUB_TOKEN) {
-        return res.status(500).json({ 
-            status: false, 
-            message: "GH_TOKEN tidak ditemukan di Environment Variables Vercel." 
-        });
+        return res.status(500).json({ status: false, message: "Server Error: GH_TOKEN belum dipasang di Vercel." });
     }
 
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
 
-    if (req.method === 'GET') {
-        try {
+    try {
+        if (req.method === 'GET') {
             const response = await fetch(url, {
-                headers: { 
-                    "Authorization": `Bearer ${GITHUB_TOKEN}`,
-                    "Accept": "application/vnd.github+json"
-                }
+                headers: { "Authorization": `Bearer ${GITHUB_TOKEN}` }
             });
             
-            if (!response.ok) throw new Error("Gagal akses repo");
+            if (!response.ok) return res.status(404).json({ status: false, message: "File users.json tidak ditemukan di repo." });
 
             const data = await response.json();
-            const content = JSON.parse(atob(data.content));
-            return res.status(200).json({ status: true, users: content.users });
-        } catch (e) {
-            return res.status(500).json({ status: false, message: "gagal baca github (cek file users.json)" });
+            const content = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
+            return res.status(200).json({ status: true, users: content.users || [] });
         }
-    }
 
-    if (req.method === 'POST') {
-        const { username, password } = req.body;
+        if (req.method === 'POST') {
+            const { username, password } = req.body;
+            if (!username || !password) return res.status(400).json({ status: false, message: "Username & Password wajib diisi." });
 
-        try {
             const getFile = await fetch(url, {
                 headers: { "Authorization": `Bearer ${GITHUB_TOKEN}` }
             });
             
-            if (!getFile.ok) throw new Error("File users.json tidak ditemukan");
+            if (!getFile.ok) return res.status(404).json({ status: false, message: "Gagal mengambil data lama dari GitHub." });
 
             const fileData = await getFile.json();
             const sha = fileData.sha;
-            const content = JSON.parse(atob(fileData.content));
+            const content = JSON.parse(Buffer.from(fileData.content, 'base64').toString('utf-8'));
 
             if (content.users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
-                return res.status(400).json({ status: false, message: "user sudah ada" });
+                return res.status(400).json({ status: false, message: "Username sudah terdaftar." });
             }
 
             content.users.push({ username, password });
@@ -60,20 +50,20 @@ export default async function handler(req, res) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    message: `tambah user ${username}`,
-                    content: btoa(JSON.stringify(content, null, 2)),
+                    message: `Rain Bot: Tambah user ${username}`,
+                    content: Buffer.from(JSON.stringify(content, null, 2)).toString('base64'),
                     sha: sha
                 })
             });
 
             if (updateFile.ok) {
-                return res.status(200).json({ status: true, message: "berhasil simpan" });
+                return res.status(200).json({ status: true, message: "Berhasil disimpan." });
             } else {
-                const errData = await updateFile.json();
-                return res.status(500).json({ status: false, message: errData.message });
+                const err = await updateFile.json();
+                return res.status(500).json({ status: false, message: err.message });
             }
-        } catch (e) {
-            return res.status(500).json({ status: false, message: e.message });
         }
+    } catch (error) {
+        return res.status(500).json({ status: false, message: "Internal Error: " + error.message });
     }
 }
