@@ -2,14 +2,13 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Rain Bot V1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #E2E2E2;
-            --yellow: #FFDE00;
             --blue: #00E6FF;
             --border: #000000;
         }
@@ -18,34 +17,36 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Public Sans', sans-serif;
             background-color: var(--bg);
             height: 100vh;
+            height: -webkit-fill-available;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
         header {
-            height: 55px;
+            height: 56px;
             background: white;
-            border-bottom: 3.5px solid var(--border);
+            border-bottom: 4px solid var(--border);
             display: flex;
             align-items: center;
-            padding: 0 15px;
+            padding: 0 16px;
             gap: 12px;
             z-index: 100;
             flex-shrink: 0;
         }
 
         .btn-back {
-            width: 35px;
-            height: 35px;
+            width: 36px;
+            height: 36px;
             background: white;
-            border: 2.5px solid var(--border);
+            border: 3px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -55,35 +56,35 @@
         #chat-container {
             flex: 1;
             overflow-y: auto;
-            padding: 15px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 20px; /* Jarak antar pesan diperlebar sedikit untuk ruang tombol */
-            background-image: radial-gradient(var(--border) 0.8px, transparent 0.8px);
-            background-size: 15px 15px;
+            gap: 18px;
+            background-image: radial-gradient(var(--border) 0.7px, transparent 0.7px);
+            background-size: 14px 14px;
             scroll-behavior: smooth;
+            padding-bottom: 30px;
         }
 
         .msg-wrapper {
             display: flex;
             flex-direction: column;
             max-width: 85%;
-            position: relative;
         }
 
         .msg-wrapper.bot { align-self: flex-start; }
         .msg-wrapper.user { align-self: flex-end; }
 
         .msg {
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 3px solid var(--border);
             font-weight: 700;
-            font-size: 13.5px;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.5;
             word-wrap: break-word;
             opacity: 0;
             transform: translateY(10px);
-            animation: appear 0.25s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: appear 0.2s forwards ease-out;
         }
 
         @keyframes appear {
@@ -92,72 +93,73 @@
 
         .user .msg {
             background: var(--blue);
-            box-shadow: 3.5px 3.5px 0px var(--border);
+            box-shadow: 4px 4px 0px var(--border);
             border-radius: 12px 12px 0 12px;
         }
 
         .bot .msg {
             background: white;
-            box-shadow: -3.5px 3.5px 0px var(--border);
+            box-shadow: -4px 4px 0px var(--border);
             border-radius: 12px 12px 12px 0;
+            width: 100%;
         }
 
         .thumb {
             width: 100%;
             border-radius: 4px;
             border: 2.5px solid var(--border);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: block;
         }
 
-        /* FLOATING BUTTON DI BAWAH CHAT */
+        /* FLOATING BUTTON: WARNA SAMA, LEBAR SAMA, ADA SPASI */
         .msg-btn {
-            margin-top: 10px; /* Jarak spasi dari bubble chat */
-            background: var(--yellow);
+            margin-top: 10px;
+            background: white; /* Warna sama dengan bubble bot */
             border: 3px solid var(--border);
-            padding: 8px 12px;
+            padding: 10px;
             text-align: center;
             font-weight: 900;
             text-transform: uppercase;
             font-size: 12px;
             cursor: pointer;
-            box-shadow: 3.5px 3.5px 0px var(--border);
-            width: fit-content;
-            align-self: center; /* Tombol berada di tengah bubble */
-            transition: all 0.1s;
+            box-shadow: -4px 4px 0px var(--border); /* Shadow sama arahnya dengan bubble bot */
+            width: 100%; /* Lebar sama dengan bubble chat bot */
+            transition: 0.1s;
         }
 
         .msg-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px var(--border);
+            transform: translate(-2px, 2px);
+            box-shadow: -2px 2px 0px var(--border);
         }
 
         .input-wrapper {
             background: white;
             border-top: 4px solid var(--border);
-            padding: 10px 15px;
+            padding: 12px 16px;
             display: flex;
             gap: 10px;
             flex-shrink: 0;
             z-index: 100;
-            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            padding-bottom: max(12px, env(safe-area-inset-bottom));
         }
 
         .neo-input {
             flex: 1;
             border: 3px solid var(--border);
-            padding: 10px 15px;
+            padding: 11px 14px;
             font-weight: 700;
             outline: none;
             box-shadow: 3px 3px 0px var(--border);
             background: white;
             font-size: 14px;
+            border-radius: 0;
         }
 
         .btn-send {
-            width: 46px;
-            height: 46px;
-            background: var(--yellow);
+            width: 48px;
+            height: 48px;
+            background: #FFDE00;
             border: 3px solid var(--border);
             display: flex;
             align-items: center;
@@ -168,8 +170,7 @@
         .typing-box {
             display: flex;
             gap: 4px;
-            padding: 5px 2px;
-            align-items: center;
+            padding: 4px 2px;
         }
 
         .dot {
@@ -185,7 +186,7 @@
 
         @keyframes wave {
             0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-6px); }
+            30% { transform: translateY(-5px); }
         }
     </style>
 </head>
@@ -193,9 +194,9 @@
 
     <header>
         <button onclick="window.history.back()" class="btn-back">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="4"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="4"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </button>
-        <div class="font-black italic uppercase tracking-tighter text-sm">[ RAIN BOT V1 ]</div>
+        <div class="font-black italic uppercase tracking-tighter">[ RAIN BOT V1 ]</div>
     </header>
 
     <div id="chat-container">
@@ -241,8 +242,10 @@
                     const b = document.createElement('div');
                     b.className = 'msg-btn';
                     b.innerText = content.button;
-                    b.onclick = () => kirim(content.button);
-                    wrapper.appendChild(b); // Tombol di luar bubble chat (floating)
+                    b.onclick = () => {
+                        kirim(content.button);
+                    };
+                    wrapper.appendChild(b);
                 }
             } else {
                 msgDiv.innerHTML = content.replace(/\n/g, '<br>').replace(/\*(.*?)\*/g, '<b>$1</b>');
@@ -257,11 +260,9 @@
             const wrapper = document.createElement('div');
             wrapper.className = 'msg-wrapper bot';
             wrapper.id = 'temp-typing';
-            
             const msgDiv = document.createElement('div');
             msgDiv.className = 'msg';
             msgDiv.innerHTML = `<div class="typing-box"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
-            
             wrapper.appendChild(msgDiv);
             container.appendChild(wrapper);
             container.scrollTop = container.scrollHeight;
@@ -281,11 +282,16 @@
                 t.remove();
                 const res = await balas(txt);
                 appendMsg(res, false);
-            }, 1000);
+            }, 800);
         }
 
         btn.onclick = () => kirim();
         input.onkeydown = (e) => { if(e.key === 'Enter') kirim(); };
+        
+        // Fix for mobile browser height
+        window.addEventListener('resize', () => {
+            container.scrollTop = container.scrollHeight;
+        });
     </script>
 </body>
 </html>
