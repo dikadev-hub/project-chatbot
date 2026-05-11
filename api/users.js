@@ -4,18 +4,32 @@ export default async function handler(req, res) {
     const REPO_NAME = "project-chatbot";
     const FILE_PATH = "users.json";
 
+    // Cek apakah token tersedia
+    if (!GITHUB_TOKEN) {
+        return res.status(500).json({ 
+            status: false, 
+            message: "GH_TOKEN tidak ditemukan di Environment Variables Vercel." 
+        });
+    }
+
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
 
     if (req.method === 'GET') {
         try {
             const response = await fetch(url, {
-                headers: { Authorization: `token ${GITHUB_TOKEN}` }
+                headers: { 
+                    "Authorization": `Bearer ${GITHUB_TOKEN}`,
+                    "Accept": "application/vnd.github+json"
+                }
             });
+            
+            if (!response.ok) throw new Error("Gagal akses repo");
+
             const data = await response.json();
             const content = JSON.parse(atob(data.content));
             return res.status(200).json({ status: true, users: content.users });
         } catch (e) {
-            return res.status(500).json({ status: false, message: "gagal baca github" });
+            return res.status(500).json({ status: false, message: "gagal baca github (cek file users.json)" });
         }
     }
 
@@ -24,8 +38,11 @@ export default async function handler(req, res) {
 
         try {
             const getFile = await fetch(url, {
-                headers: { Authorization: `token ${GITHUB_TOKEN}` }
+                headers: { "Authorization": `Bearer ${GITHUB_TOKEN}` }
             });
+            
+            if (!getFile.ok) throw new Error("File users.json tidak ditemukan");
+
             const fileData = await getFile.json();
             const sha = fileData.sha;
             const content = JSON.parse(atob(fileData.content));
@@ -39,8 +56,8 @@ export default async function handler(req, res) {
             const updateFile = await fetch(url, {
                 method: 'PUT',
                 headers: {
-                    Authorization: `token ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${GITHUB_TOKEN}`,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     message: `tambah user ${username}`,
@@ -52,10 +69,11 @@ export default async function handler(req, res) {
             if (updateFile.ok) {
                 return res.status(200).json({ status: true, message: "berhasil simpan" });
             } else {
-                return res.status(500).json({ status: false, message: "gagal tulis ke github" });
+                const errData = await updateFile.json();
+                return res.status(500).json({ status: false, message: errData.message });
             }
         } catch (e) {
-            return res.status(500).json({ status: false, message: "error sistem github" });
+            return res.status(500).json({ status: false, message: e.message });
         }
     }
 }
